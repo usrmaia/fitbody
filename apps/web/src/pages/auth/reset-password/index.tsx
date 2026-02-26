@@ -17,14 +17,14 @@ export function ResetPasswordPage() {
       <Label className="mt-16 justify-center text-center text-xl font-bold sm:mt-8">
         Redefinir sua senha
       </Label>
-      <Label className="text-muted-foreground mt-6 justify-center px-11 text-center text-sm leading-relaxed lg:mt-4">
+      <Label className="text-muted-foreground mt-6 justify-center px-8 text-center text-sm leading-relaxed lg:mt-4">
         Insira sua nova senha e o token de redefinição que você recebeu por
         email. Certifique-se de escolher uma senha forte para proteger sua
         conta.
       </Label>
 
       <form className="mt-16 sm:mt-12">
-        <FieldSet className="bg-card w-full px-10 py-6">
+        <FieldSet className="bg-card w-full px-8 py-6">
           <FieldGroup>
             <Field>
               <FieldLabel htmlFor="email">Nova Senha</FieldLabel>
