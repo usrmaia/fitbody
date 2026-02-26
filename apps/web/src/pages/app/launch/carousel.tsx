@@ -77,7 +77,7 @@ export function LaunchCarousel() {
 
               {values.length - 1 === index && (
                 <div className="text-center">
-                  <NavLink to="/app/auth/sign-up">
+                  <NavLink to="/auth/sign-up">
                     <Button
                       variant="default"
                       className="rounded-full border border-white/90 bg-white/10 backdrop-blur-md hover:bg-white/30"

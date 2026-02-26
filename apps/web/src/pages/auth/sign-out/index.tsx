@@ -1,9 +1,20 @@
 import { NavLink, useNavigate } from "react-router";
 
 import { BackButtonNavigation, Button, Label } from "@/components/ui";
+import { authClient } from "@/lib/auth-client";
 
 export function SignOutPage() {
   const navigate = useNavigate();
+
+  const handleSignOut = () => {
+    authClient.signOut({
+      fetchOptions: {
+        onSuccess: () => {
+          navigate("/auth/sign-in");
+        },
+      },
+    });
+  };
 
   return (
     <div className="mt-5 px-8">
@@ -17,8 +28,8 @@ export function SignOutPage() {
         <Button variant="outline" size="lg" onClick={() => navigate(-1)}>
           Não, manter-me conectado
         </Button>
-        <NavLink to="/app/auth/sign-in">
-          <Button variant="destructive" size="lg">
+        <NavLink to="/auth/sign-in">
+          <Button variant="destructive" size="lg" onClick={handleSignOut}>
             Sim, sair da minha conta
           </Button>
         </NavLink>

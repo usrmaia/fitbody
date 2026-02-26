@@ -79,7 +79,7 @@ function NavMenuItens() {
     {
       label: "Redefinir Senha",
       item: <Key className="h-5 w-5" />,
-      to: "/app/auth/reset-password",
+      to: "/auth/reset-password",
     },
     {
       label: "Suporte",
@@ -94,7 +94,7 @@ function NavMenuItens() {
     {
       label: "Sair da Conta",
       item: <LogOut className="h-5 w-5" />,
-      to: "/app/auth/sign-out",
+      to: "/auth/sign-out",
     },
   ];
 

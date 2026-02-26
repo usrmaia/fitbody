@@ -5,7 +5,7 @@ export function MarketingPage() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    navigate("/app/home");
+    navigate("/auth/sign-in");
   }, [navigate]);
 
   return null;
