@@ -13,11 +13,12 @@ import {
   SelectValue,
   useCarousel,
 } from "@/components/ui";
-import type { SetUpProp } from "./useSetUp";
+import { ActivityLevel, activityLevelParser } from "@/packages/schemas";
+import type { SetUpProps } from "./useSetUp";
 
-export function SetUpActivityLevelPage({ formSetup }: SetUpProp) {
+export function SetUpActivityLevelPage({ form }: SetUpProps) {
   const { scrollNext } = useCarousel();
-  const { setValue, watch } = formSetup;
+  const { setValue, watch } = form;
 
   return (
     <div className="flex flex-col items-center">
@@ -37,18 +38,10 @@ export function SetUpActivityLevelPage({ formSetup }: SetUpProp) {
         <FieldSet className="w-full">
           <FieldGroup>
             <Select
-              name="activity_level"
+              name="activityLevel"
               value={watch("activityLevel")}
               onValueChange={(value) =>
-                setValue(
-                  "activityLevel",
-                  value as
-                    | "sedentary"
-                    | "lightly_active"
-                    | "moderately_active"
-                    | "very_active"
-                    | "extra_active",
-                )
+                setValue("activityLevel", value as ActivityLevel)
               }
             >
               <SelectTrigger className="w-full">
@@ -57,17 +50,11 @@ export function SetUpActivityLevelPage({ formSetup }: SetUpProp) {
               <SelectContent>
                 <SelectGroup>
                   <SelectLabel>Nível de Atividade</SelectLabel>
-                  <SelectItem value="sedentary">Sedentário</SelectItem>
-                  <SelectItem value="lightly_active">
-                    Levemente Ativo
-                  </SelectItem>
-                  <SelectItem value="moderately_active">
-                    Moderadamente Ativo
-                  </SelectItem>
-                  <SelectItem value="very_active">Muito Ativo</SelectItem>
-                  <SelectItem value="extra_active">
-                    Extremamente Ativo
-                  </SelectItem>
+                  {Object.values(ActivityLevel).map((level) => (
+                    <SelectItem key={level} value={level}>
+                      {activityLevelParser(level)}
+                    </SelectItem>
+                  ))}
                 </SelectGroup>
               </SelectContent>
             </Select>

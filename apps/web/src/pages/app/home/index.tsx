@@ -1,19 +1,24 @@
 import { Bell, Search, UserCog } from "lucide-react";
-
-import { Label } from "@/components/ui";
-import { ModeToggle } from "@/theme/mode-toggle";
-import { NavigationMenu } from "./nav-menu";
-import { Recommendations } from "./recomendations";
-import { DisplayWeeklyChallenge } from "./weekly-challenge";
-import { Articles } from "./articles";
 import { NavLink } from "react-router";
 
+import { Articles } from "./articles";
+import { Label } from "@/components/ui";
+import { NavigationMenu } from "./nav-menu";
+import { Recommendations } from "./recomendations";
+import { useProfile } from "@/store";
+import { ModeToggle } from "@/theme/mode-toggle";
+import { DisplayWeeklyChallenge } from "./weekly-challenge";
+
 export function HomePage() {
+  const { profile } = useProfile();
+
   return (
     <div className="mt-5 flex h-full w-full flex-col gap-2">
       <header className="flex justify-between px-8">
         <div className="flex flex-col gap-1">
-          <Label className="text-primary pt-1 text-xl font-bold">Oi,</Label>
+          <Label className="text-primary pt-1 text-xl font-bold">
+            Oi, {profile?.user?.name.split(" ")[0]}!
+          </Label>
           <Label className="font-mono text-xs font-bold">
             É hora de desafiar seus limites!
           </Label>

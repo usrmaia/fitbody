@@ -11,11 +11,11 @@ import {
   Label,
   useCarousel,
 } from "@/components/ui";
-import type { SetUpProp } from "./useSetUp";
+import { type SetUpProps } from "./useSetUp";
 
-export function SetUpWeightPage({ formSetup }: SetUpProp) {
+export function SetUpWeightPage({ form }: SetUpProps) {
   const { scrollNext } = useCarousel();
-  const { setValue, watch } = formSetup;
+  const { setValue, watch } = form;
 
   const weights = Array.from({ length: 170 }).map((_, index) => {
     const weight = index + 30;
@@ -39,15 +39,15 @@ export function SetUpWeightPage({ formSetup }: SetUpProp) {
         <Card className="flex w-full flex-row items-center justify-center rounded-3xl">
           <CardContent
             className="flex items-center justify-center"
-            onClick={() => setValue("weight_unit", "kg")}
+            onClick={() => setValue("weightUnit", "KG")}
           >
             <Label
               className={
                 "text-primary-foreground text-xl font-bold" +
-                (watch("weight_unit") === "kg" ? " text-primary" : "")
+                (watch("weightUnit") === "KG" ? " text-primary" : "")
               }
             >
-              KG{watch("weight_unit") === "kg" && "*"}
+              KG{watch("weightUnit") === "KG" && "*"}
             </Label>
           </CardContent>
           <CardContent className="flex items-center justify-center">
@@ -55,15 +55,15 @@ export function SetUpWeightPage({ formSetup }: SetUpProp) {
           </CardContent>
           <CardContent
             className="flex items-center justify-center"
-            onClick={() => setValue("weight_unit", "lbs")}
+            onClick={() => setValue("weightUnit", "LB")}
           >
             <Label
               className={
                 "text-primary-foreground text-xl font-bold" +
-                (watch("weight_unit") === "lbs" ? " text-primary" : "")
+                (watch("weightUnit") === "LB" ? " text-primary" : "")
               }
             >
-              LBs{watch("weight_unit") === "lbs" && "*"}
+              LBs{watch("weightUnit") === "LB" && "*"}
             </Label>
           </CardContent>
         </Card>
@@ -74,7 +74,7 @@ export function SetUpWeightPage({ formSetup }: SetUpProp) {
           align: "start",
           dragFree: true,
           startIndex:
-            weights.findIndex((weight) => weight === watch("weight")) - 2,
+            weights.findIndex((weight) => weight === watch("weightKg")) - 2,
         }}
         className="w-full"
       >
@@ -83,7 +83,7 @@ export function SetUpWeightPage({ formSetup }: SetUpProp) {
             <CarouselItem
               key={index}
               className="m-0 basis-1/5 p-0"
-              onClick={() => setValue("weight", weight)}
+              onClick={() => setValue("weightKg", weight)}
             >
               <Card className="bg-secondary rounded-none">
                 <CardContent className="flex justify-center">
@@ -97,8 +97,8 @@ export function SetUpWeightPage({ formSetup }: SetUpProp) {
 
       <ChevronDown size={24} className="text-primary mt-2 animate-bounce" />
       <Label className="mt-8 items-baseline text-6xl font-bold">
-        {watch("weight")}
-        <span className="text-sm">{watch("weight_unit")}</span>
+        {watch("weightKg")}
+        <span className="text-sm">{watch("weightUnit")}</span>
       </Label>
 
       <Button

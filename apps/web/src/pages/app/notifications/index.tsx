@@ -24,9 +24,9 @@ export function NotificationsPage() {
   ];
 
   return (
-    <div className="mt-5 px-8">
+    <>
       <BackButtonNavigation title="Notificações" />
-      <div className="mt-5 flex flex-col gap-4">
+      <div className="flex flex-col gap-4">
         {notifications.map((notification, index) => (
           <div
             key={index}
@@ -43,6 +43,6 @@ export function NotificationsPage() {
           </div>
         ))}
       </div>
-    </div>
+    </>
   );
 }

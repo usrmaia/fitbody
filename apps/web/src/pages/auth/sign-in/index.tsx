@@ -66,24 +66,22 @@ export function SignInPage() {
     <>
       <BackButtonNavigation title="Entrar" />
 
-      <Label className="mt-16 justify-center text-center text-xl font-bold sm:mt-8">
+      <Label className="justify-center text-center text-xl font-bold">
         Bem-vindo de volta!
       </Label>
-      <Label className="text-muted-foreground mt-6 justify-center px-8 text-center text-sm leading-relaxed lg:mt-4">
+      <Label className="text-muted-foreground mt-5 justify-center px-8 text-center text-sm leading-relaxed">
         Acesse sua conta para acompanhar seus treinos e progresso. Registre
         exercícios, alcance suas metas e evolua constantemente!
       </Label>
 
-      <form className="mt-16 sm:mt-12" onSubmit={handleSignInSubmit}>
+      <form className="mt-5" onSubmit={handleSignInSubmit}>
         <FieldSet className="bg-card w-full px-8 py-6">
           <FieldGroup>
             <Field>
               <FieldLabel htmlFor="email">Email</FieldLabel>
               <Input
-                id="email"
-                type="email"
+                autoComplete="email"
                 placeholder="Digite seu email"
-                className="input input-bordered w-full"
                 {...register("email")}
               />
               <FieldError errors={[{ message: errors.email?.message }]} />
@@ -92,10 +90,9 @@ export function SignInPage() {
             <Field>
               <FieldLabel htmlFor="password">Senha</FieldLabel>
               <Input
-                id="password"
+                autoComplete="current-password"
                 type="password"
                 placeholder="Digite sua senha"
-                className="input input-bordered w-full"
                 {...register("password")}
               />
               <FieldError errors={[{ message: errors.password?.message }]} />
@@ -114,13 +111,13 @@ export function SignInPage() {
                 )}
               />
               <FieldLabel htmlFor="rememberMe">Lembrar-me</FieldLabel>
-              <FieldError errors={[{ message: errors.rememberMe?.message }]} />
               <FieldDescription className="text-right">
                 <Link to="/auth/forgot-password" className="text-primary">
                   Esqueceu sua senha?
                 </Link>
               </FieldDescription>
             </Field>
+            <FieldError errors={[{ message: errors.rememberMe?.message }]} />
           </FieldGroup>
 
           <FieldError>{errors.root?.serverError?.message}</FieldError>
@@ -129,8 +126,7 @@ export function SignInPage() {
         <div className="flex justify-center">
           <Button
             type="submit"
-            variant="default"
-            className="mt-8 w-44 rounded-full border font-bold backdrop-blur-md sm:mt-4"
+            className="mt-4 w-44 rounded-full border font-bold backdrop-blur-md"
             disabled={isSubmitting}
           >
             Entrar
@@ -141,7 +137,7 @@ export function SignInPage() {
           ou entre com sua conta do
         </Label>
 
-        <div className="mt-4 flex justify-center gap-4 sm:mt-2">
+        <div className="mt-4 flex justify-center gap-4">
           <div className="bg-primary rounded-xl p-2">
             <FaGoogle className="text-primary-foreground" />
           </div>

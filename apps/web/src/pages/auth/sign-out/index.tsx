@@ -17,10 +17,10 @@ export function SignOutPage() {
   };
 
   return (
-    <div className="mt-5 px-8">
+    <>
       <BackButtonNavigation title="Sair da Conta" />
 
-      <Label className="mt-5 text-center text-xl font-bold">
+      <Label className="text-center text-xl font-bold">
         Você tem certeza que deseja sair da sua conta?
       </Label>
 
@@ -34,6 +34,6 @@ export function SignOutPage() {
           </Button>
         </NavLink>
       </div>
-    </div>
+    </>
   );
 }

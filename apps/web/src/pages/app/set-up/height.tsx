@@ -11,11 +11,11 @@ import {
   Label,
   useCarousel,
 } from "@/components/ui";
-import type { SetUpProp } from "./useSetUp";
+import type { SetUpProps } from "./useSetUp";
 
-export function SetUpHeightPage({ formSetup }: SetUpProp) {
+export function SetUpHeightPage({ form }: SetUpProps) {
   const { scrollNext } = useCarousel();
-  const { setValue, watch } = formSetup;
+  const { setValue, watch } = form;
 
   const heights = Array.from({ length: 151 }).map((_, index) => {
     const height = index + 100;
@@ -35,7 +35,7 @@ export function SetUpHeightPage({ formSetup }: SetUpProp) {
         saúde e bem-estar, garantindo que sejam adequadas ao seu perfil físico.
       </Label>
 
-      <Label className="mt-10 text-6xl font-bold">{watch("height")}</Label>
+      <Label className="mt-10 text-6xl font-bold">{watch("heightCm")}</Label>
       <ChevronDown
         size={24}
         className="text-primary mt-8 mb-2 animate-bounce"
@@ -46,7 +46,7 @@ export function SetUpHeightPage({ formSetup }: SetUpProp) {
           align: "start",
           dragFree: true,
           startIndex:
-            heights.findIndex((height) => height === watch("height")) - 2,
+            heights.findIndex((height) => height === watch("heightCm")) - 2,
         }}
         className="w-full"
       >
@@ -55,7 +55,7 @@ export function SetUpHeightPage({ formSetup }: SetUpProp) {
             <CarouselItem
               key={index}
               className="m-0 basis-1/5 p-0"
-              onClick={() => setValue("height", height)}
+              onClick={() => setValue("heightCm", height)}
             >
               <Card className="bg-secondary rounded-none">
                 <CardContent className="flex justify-center">

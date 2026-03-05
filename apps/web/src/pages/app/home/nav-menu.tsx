@@ -1,6 +1,14 @@
-import { Apple, Dumbbell, SquareChartGantt, Star, Users } from "lucide-react";
+import {
+  Apple,
+  BicepsFlexed,
+  Dumbbell,
+  SquareChartGantt,
+  Star,
+  Users,
+} from "lucide-react";
 
 import { Label, Separator } from "@/components/ui";
+import { NavLink } from "react-router";
 
 function IconLabelInfo({
   title,
@@ -22,7 +30,13 @@ function IconLabelInfo({
 export function NavigationMenu() {
   return (
     <div className="mt-4 flex h-20 items-center gap-4 overflow-auto px-8">
-      <IconLabelInfo title="Treino" Icon={Dumbbell} />
+      <NavLink to="/app/workout-plans">
+        <IconLabelInfo title="Treino" Icon={Dumbbell} />
+      </NavLink>
+      <Separator orientation="vertical" />
+      <NavLink to="/app/exercises">
+        <IconLabelInfo title="Exercícios" Icon={BicepsFlexed} />
+      </NavLink>
       <Separator orientation="vertical" />
       <IconLabelInfo title="Progresso" Icon={SquareChartGantt} />
       <Separator orientation="vertical" />

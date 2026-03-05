@@ -2,11 +2,11 @@ import { Mars, Venus } from "lucide-react";
 
 import { BackButtonNavigation } from "./back-button-nav";
 import { Button, Label, useCarousel } from "@/components/ui";
-import type { SetUpProp } from "./useSetUp";
+import type { SetUpProps } from "./useSetUp";
 
-export function SetUpGenderPage({ formSetup }: SetUpProp) {
+export function SetUpGenderPage({ form }: SetUpProps) {
   const { scrollNext } = useCarousel();
-  const { setValue, watch } = formSetup;
+  const { setValue, watch } = form;
 
   return (
     <div className="flex flex-col items-center">
@@ -23,8 +23,8 @@ export function SetUpGenderPage({ formSetup }: SetUpProp) {
       </Label>
 
       <div
-        className={`bg-card border-foreground mt-10 flex h-40 w-40 items-center justify-center gap-16 rounded-full border ${watch("gender") === "male" ? "bg-primary" : ""}`}
-        onClick={() => setValue("gender", "male")}
+        className={`bg-card border-foreground mt-10 flex h-40 w-40 items-center justify-center gap-16 rounded-full border ${watch("gender") === "MALE" ? "bg-primary" : ""}`}
+        onClick={() => setValue("gender", "MALE")}
       >
         <Mars className="h-16 w-16" />
       </div>
@@ -32,8 +32,8 @@ export function SetUpGenderPage({ formSetup }: SetUpProp) {
       <Label className="mt-2 font-sans text-xl font-bold">Masculino</Label>
 
       <div
-        className={`bg-card border-foreground mt-5 flex h-40 w-40 items-center justify-center gap-16 rounded-full border ${watch("gender") === "female" ? "bg-primary" : ""}`}
-        onClick={() => setValue("gender", "female")}
+        className={`bg-card border-foreground mt-5 flex h-40 w-40 items-center justify-center gap-16 rounded-full border ${watch("gender") === "FEMALE" ? "bg-primary" : ""}`}
+        onClick={() => setValue("gender", "FEMALE")}
       >
         <Venus className="h-16 w-16" />
       </div>

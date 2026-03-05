@@ -6,6 +6,9 @@ export default async function authRoute(app: FastifyInstance) {
   app.route({
     method: ["GET", "POST"],
     url: "/auth/*",
+    schema: {
+      tags: ["Auth"],
+    },
     async handler(request, reply) {
       // Construct request URL
       const url = new URL(request.url, `http://${request.headers.host}`);

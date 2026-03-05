@@ -13,7 +13,7 @@ datasource db {
 }
 
 model User {
-  id            String    @id
+  id            String    @id @default(ulid())
   name          String
   email         String
   emailVerified Boolean   @default(false)
@@ -25,6 +25,11 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
+  profile         Profile?
+  exercises       Exercise[]
+  workoutPlans    WorkoutPlan[]
+  workoutSessions WorkoutSession[]
+
   @@unique([email])
   @@map("user")
 }
@@ -35,7 +40,7 @@ enum Role {
 }
 
 model Session {
-  id        String   @id
+  id        String   @id @default(ulid())
   expiresAt DateTime
   token     String
   ipAddress String?
@@ -52,7 +57,7 @@ model Session {
 }
 
 model Account {
-  id                    String    @id
+  id                    String    @id @default(ulid())
   accountId             String
   providerId            String
   userId                String
@@ -73,7 +78,7 @@ model Account {
 }
 
 model Verification {
-  id         String   @id
+  id         String   @id @default(ulid())
   identifier String
   value      String
   expiresAt  DateTime
@@ -83,4 +88,248 @@ model Verification {
 
   @@index([identifier])
   @@map("verification")
+}
+
+enum Gender {
+  MALE
+  FEMALE
+}
+
+enum HeightUnit {
+  CM
+  IN
+}
+
+enum WeightUnit {
+  KG
+  LB
+}
+
+enum Goal {
+  BUILD_MUSCLE
+  LOSE_FAT
+  MAINTAIN_WEIGHT
+  IMPROVE_STRENGTH
+  ENHANCE_ENDURANCE
+  INCREASE_FLEXIBILITY
+  IMPROVE_HEALTH
+  OTHER
+}
+
+enum ActivityLevel {
+  SEDENTARY
+  LIGHTLY_ACTIVE
+  MODERATELY_ACTIVE
+  VERY_ACTIVE
+  EXTRA_ACTIVE
+}
+
+model Profile {
+  userId        String        @id
+  user          User          @relation(fields: [userId], references: [id])
+  gender        Gender
+  bio           String?       @db.VarChar(1024)
+  birthDate     DateTime
+  heightCm      Decimal       @db.Decimal(5, 2)
+  heightUnit    HeightUnit    @default(CM)
+  weightKg      Decimal       @db.Decimal(5, 2)
+  weightUnit    WeightUnit    @default(KG)
+  goal          Goal
+  goalOther     String?       @db.VarChar(256)
+  activityLevel ActivityLevel
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+  @@map("profile")
+}
+
+model Exercise {
+  id          String     @id @default(ulid())
+  name        String
+  description String?
+  image       String?
+  video       String?
+  visibility  Visibility @default(PUBLIC)
+
+  createdById String
+  createdBy   User     @relation(fields: [createdById], references: [id], onDelete: Restrict)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  exerciseMuscleGroups ExerciseMuscleGroup[]
+  workoutSets          WorkoutSet[]
+  workoutDayExercises  WorkoutDayExercise[]
+
+  @@unique([name, createdById])
+  @@map("exercise")
+}
+
+enum MuscleGroup {
+  CHEST
+  TRICEPS
+  SHOULDERS
+  TRAPEZIUS
+  UPPER_BACK
+  MID_BACK
+  LOWER_BACK
+  BICEPS
+  FOREARMS_FLEXORS
+  FOREARMS_EXTENSORS
+  ABS
+  HIP_FLEXORS
+  QUADS
+  HAMSTRINGS
+  CALVES
+  GLUTES
+  ADDUCTORS
+  ABDUCTORS
+}
+
+enum MuscleGroupRole {
+  PRIMARY
+  SECONDARY
+  STABILIZER
+  EMPHASIS
+}
+
+model ExerciseMuscleGroup {
+  exerciseId String
+  exercise   Exercise @relation(fields: [exerciseId], references: [id], onDelete: Cascade)
+
+  muscleGroup MuscleGroup
+  role        MuscleGroupRole
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@id([exerciseId, muscleGroup, role])
+  @@map("exercise_muscle_group")
+}
+
+enum Visibility {
+  PUBLIC
+  PRIVATE
+  UNLISTED
+}
+
+model WorkoutPlan {
+  id          String     @id @default(ulid())
+  name        String
+  goal        String?
+  startedAt   DateTime?
+  endedAt     DateTime?
+  description String?
+  image       String?
+  video       String?
+  visibility  Visibility @default(PUBLIC)
+
+  createdById String
+  createdBy   User     @relation(fields: [createdById], references: [id], onDelete: Restrict)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  workoutDays WorkoutDay[]
+
+  @@index([id, createdById])
+  @@map("workout_plan")
+}
+
+enum DayType {
+  REST
+  WORKOUT
+}
+
+enum DayFocus {
+  BODYBUILDING
+  STRENGTH
+  CARDIO
+  FLEXIBILITY
+}
+
+model WorkoutDay {
+  id      String    @id @default(ulid())
+  dayCode String? // e.g., "Monday", "Tuesday", "A", "B", "1", "2", etc.
+  seq     Int       @default(0) @db.SmallInt // To maintain the order of workout days in a workout plan
+  type    DayType   @default(WORKOUT)
+  focus   DayFocus?
+
+  workoutPlanId String
+  workoutPlan   WorkoutPlan @relation(fields: [workoutPlanId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  workoutSessions     WorkoutSession[]
+  workoutDayExercises WorkoutDayExercise[]
+
+  @@unique([workoutPlanId, seq])
+  @@index([workoutPlanId])
+  @@map("workout_day")
+}
+
+model WorkoutDayExercise {
+  id        String    @id @default(ulid())
+  seq       Int       @default(0) @db.SmallInt // To maintain the order of exercises in a workout day
+  notes     String?   @db.VarChar(2048)
+  startedAt DateTime? // Time of day when the exercise was planned.
+
+  workoutDayId String
+  workoutDay   WorkoutDay @relation(fields: [workoutDayId], references: [id], onDelete: Cascade)
+  exerciseId   String
+  exercise     Exercise   @relation(fields: [exerciseId], references: [id], onDelete: Restrict)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([workoutDayId, seq])
+  @@index([workoutDayId])
+  @@map("workout_day_exercise")
+}
+
+model WorkoutSession {
+  id         String     @id @default(ulid())
+  notes      String?    @db.VarChar(1024)
+  startedAt  DateTime
+  endedAt    DateTime?
+  visibility Visibility @default(PUBLIC)
+
+  workoutDayId String
+  workoutDay   WorkoutDay @relation(fields: [workoutDayId], references: [id], onDelete: NoAction)
+  userId       String
+  user         User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  workoutSets WorkoutSet[]
+
+  @@index([workoutDayId, userId])
+  @@map("workout_session")
+}
+
+// Séries realizadas em um treino
+model WorkoutSet {
+  id            String      @id @default(ulid())
+  reps          Int?        @db.SmallInt
+  weightKg      Decimal?    @db.Decimal(5, 2)
+  weightUnit    WeightUnit?
+  timeInSeconds Int?        @db.SmallInt
+  rpe           Int         @default(1) @db.SmallInt // Rate of Perceived Exertion
+  rir           Int?        @default(0) @db.SmallInt // Reps in Reserve
+  seq           Int         @default(0) // To maintain the order of sets in a workout session
+  notes         String?     @db.VarChar(1024)
+
+  workoutSessionId String
+  workoutSession   WorkoutSession @relation(fields: [workoutSessionId], references: [id], onDelete: Cascade)
+  exerciseId       String
+  exercise         Exercise       @relation(fields: [exerciseId], references: [id], onDelete: Restrict)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([workoutSessionId, seq])
+  @@index([workoutSessionId])
+  @@map("workout_set")
 }

@@ -6,55 +6,95 @@ import {
   Key,
   LockKeyhole,
   LogOut,
+  Plus,
   User,
 } from "lucide-react";
 import { NavLink } from "react-router";
 
-import { BackButtonNavigation, Label, Separator } from "@/components/ui";
+import {
+  BackButtonNavigation,
+  Button,
+  Label,
+  Separator,
+} from "@/components/ui";
+import { useProfile } from "@/store";
 
 import defaultUserImage from "@/assets/images/default-avatar-user.jpg";
 
 export function SettingsPage() {
   return (
-    <div className="flex flex-col gap-2">
+    <>
       <UserProfileHeader />
       <NavMenuItens />
-    </div>
+    </>
   );
 }
 
 function UserProfileHeader() {
+  const { profile } = useProfile();
+
   return (
-    <header className="bg-card mb-8 flex flex-col gap-2 px-8 pt-5 pb-2">
+    <header className="bg-card flex flex-col px-8 pb-4">
       <BackButtonNavigation title="Perfil" />
-      <div className="mt-1 flex flex-col items-center">
-        <img
-          src={defaultUserImage}
-          alt="User Avatar"
-          className="h-24 w-24 rounded-full"
-        />
-        <Label className="mt-1 text-xl font-bold">Nome de Usuário</Label>
-        <Label className="text-xs font-light">usuario@email.com</Label>
-        <Label className="text-xs font-semibold">
-          Aniv: <span className="font-light">01 de Janeiro</span>
-        </Label>
-      </div>
-      <div className="flex items-center justify-evenly rounded-md border p-4">
-        <div className="flex flex-col items-center gap-1">
-          <Label className="font-mono font-semibold">75 kg</Label>
-          <Label className="font-mono font-light">Peso</Label>
-        </div>
-        <Separator orientation="vertical" />
-        <div className="flex flex-col items-center gap-1">
-          <Label className="font-mono font-semibold">28</Label>
-          <Label className="font-mono font-light">Idade</Label>
-        </div>
-        <Separator orientation="vertical" />
-        <div className="flex flex-col items-center gap-1">
-          <Label className="font-mono font-semibold">1,75 m</Label>
-          <Label className="font-mono font-light">Altura</Label>
-        </div>
-      </div>
+      {!profile && (
+        <NavLink to="/app/set-up" className="flex">
+          <Button className="w-full">
+            Adicionar Perfil <Plus />
+          </Button>
+        </NavLink>
+      )}
+      {profile && (
+        <>
+          <div className="flex flex-col items-center">
+            <img
+              src={profile?.user?.image || defaultUserImage}
+              alt="User Avatar"
+              className="h-24 w-24 rounded-full"
+            />
+            <Label className="mt-1 text-xl font-bold">
+              {profile?.user?.name}
+            </Label>
+            <Label className="text-xs font-light">{profile?.user?.email}</Label>
+            <Label className="text-xs font-semibold">
+              Aniv:{" "}
+              <span className="font-light">
+                {new Date(profile?.birthDate).toLocaleDateString("pt-BR", {
+                  day: "2-digit",
+                  month: "2-digit",
+                  year: "2-digit",
+                })}
+              </span>
+            </Label>
+          </div>
+          <div className="flex items-center justify-evenly rounded-md border p-4">
+            <div className="flex flex-col items-center gap-1">
+              <Label className="font-mono font-semibold">
+                {profile?.weightKg} {profile?.weightUnit}
+              </Label>
+              <Label className="font-mono font-light">Peso</Label>
+            </div>
+            <Separator orientation="vertical" />
+            <div className="flex flex-col items-center gap-1">
+              <Label className="font-mono font-semibold">
+                {profile?.birthDate &&
+                  Math.floor(
+                    (new Date().getTime() -
+                      new Date(profile.birthDate).getTime()) /
+                      (1000 * 60 * 60 * 24 * 365),
+                  )}
+              </Label>
+              <Label className="font-mono font-light">Idade</Label>
+            </div>
+            <Separator orientation="vertical" />
+            <div className="flex flex-col items-center gap-1">
+              <Label className="font-mono font-semibold">
+                {profile?.heightCm} {profile?.heightUnit}
+              </Label>
+              <Label className="font-mono font-light">Altura</Label>
+            </div>
+          </div>
+        </>
+      )}
     </header>
   );
 }
@@ -99,7 +139,7 @@ function NavMenuItens() {
   ];
 
   return (
-    <div className="mt-5 flex flex-col gap-4 px-8">
+    <div className="mt-10 flex flex-col gap-4 px-8">
       {menuItems.map((item) => (
         <NavLink
           key={item.label}

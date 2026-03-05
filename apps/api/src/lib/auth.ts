@@ -3,7 +3,7 @@ import { prismaAdapter } from "better-auth/adapters/prisma";
 import { openAPI } from "better-auth/plugins";
 
 import { env, loggerAdapter } from "@/config";
-import { addRoleToUser } from "@/features/user/service";
+import { addRoleToUser } from "@/features/user/user.service";
 import prisma from "./prisma";
 
 const defaultExpiration = 60 * 60; // 1 hour in seconds

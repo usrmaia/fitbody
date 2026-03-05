@@ -1,5 +1,8 @@
 import { FaGithub, FaGoogle, FaLinkedin } from "react-icons/fa";
-import { Link } from "react-router";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { Link, useNavigate } from "react-router";
+import z from "zod";
 
 import {
   BackButtonNavigation,
@@ -13,9 +16,6 @@ import {
   Input,
   Label,
 } from "@/components/ui";
-import z from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
 import { authClient } from "@/lib/auth-client";
 
 const signUpSchema = z
@@ -38,6 +38,7 @@ const signUpSchema = z
 type SignUpFormType = z.infer<typeof signUpSchema>;
 
 export function SignUpPage() {
+  const navigate = useNavigate();
   const {
     formState: { errors, isSubmitting },
     clearErrors,
@@ -49,21 +50,23 @@ export function SignUpPage() {
   });
 
   const handleSignUpSubmit = handleSubmit(async ({ name, email, password }) => {
-    clearErrors("root.serverError");
+    clearErrors("root");
 
     await authClient.signUp.email(
       { email, name, password, callbackURL: "/auth/sign-in" },
       {
+        onSuccess() {
+          navigate("/auth/sign-in");
+        },
         onError(context) {
           const code = context?.error.code || "unknown_error";
-          setError("root.serverError", {
+          setError("root", {
             type: "server",
             message:
               code === "USER_ALREADY_EXISTS_USE_ANOTHER_EMAIL"
                 ? "O email já está em uso. Tente outro."
                 : "Ocorreu um erro ao cadastrar. Tente novamente.",
           });
-          console.error("Erro ao cadastrar:", code);
         },
       },
     );
@@ -73,34 +76,22 @@ export function SignUpPage() {
     <>
       <BackButtonNavigation title="Cadastrar" />
 
-      <Label className="mt-16 justify-center text-center text-xl font-bold sm:mt-8">
+      <Label className="justify-center text-center text-xl font-bold">
         Bem-vindo!
       </Label>
 
-      <form className="mt-16 sm:mt-12" onSubmit={handleSignUpSubmit}>
-        <FieldSet className="bg-card w-full px-8 py-6">
+      <form className="mt-5" onSubmit={handleSignUpSubmit}>
+        <FieldSet className="bg-card px-8 py-6">
           <FieldGroup>
             <Field>
               <FieldLabel htmlFor="name">Nome</FieldLabel>
-              <Input
-                id="name"
-                type="text"
-                placeholder="Digite seu nome"
-                className="input input-bordered w-full"
-                {...register("name")}
-              />
+              <Input placeholder="Digite seu nome" {...register("name")} />
               <FieldError>{errors.name?.message}</FieldError>
             </Field>
 
             <Field>
               <FieldLabel htmlFor="email">Email</FieldLabel>
-              <Input
-                id="email"
-                type="email"
-                placeholder="Digite seu email"
-                className="input input-bordered w-full"
-                {...register("email")}
-              />
+              <Input placeholder="Digite seu email" {...register("email")} />
               <FieldDescription>
                 Nunca compartilharemos seu email com mais ninguém.
               </FieldDescription>
@@ -110,10 +101,9 @@ export function SignUpPage() {
             <Field>
               <FieldLabel htmlFor="password">Senha</FieldLabel>
               <Input
-                id="password"
+                autoComplete="new-password"
                 type="password"
                 placeholder="Digite sua senha"
-                className="input input-bordered w-full"
                 {...register("password")}
               />
               <FieldError>{errors.password?.message}</FieldError>
@@ -124,17 +114,16 @@ export function SignUpPage() {
                 Confirme sua senha
               </FieldLabel>
               <Input
-                id="confirmPassword"
+                autoComplete="new-password"
                 type="password"
                 placeholder="Confirme sua senha"
-                className="input input-bordered w-full"
                 {...register("confirmPassword")}
               />
               <FieldError>{errors.confirmPassword?.message}</FieldError>
             </Field>
           </FieldGroup>
 
-          <FieldError>{errors.root?.serverError?.message}</FieldError>
+          <FieldError>{errors.root?.message}</FieldError>
         </FieldSet>
 
         <Label className="mt-4 block flex-row px-8 text-center text-xs">
@@ -153,7 +142,7 @@ export function SignUpPage() {
           <Button
             type="submit"
             variant="default"
-            className="mt-4 w-44 rounded-full border font-bold backdrop-blur-md sm:mt-4"
+            className="mt-4 w-44 rounded-full border font-bold backdrop-blur-md"
             disabled={isSubmitting}
           >
             Cadastrar
@@ -164,7 +153,7 @@ export function SignUpPage() {
           ou cadastre-se com sua conta do
         </Label>
 
-        <div className="mt-4 flex justify-center gap-4 sm:mt-2">
+        <div className="mt-4 flex justify-center gap-4">
           <div className="bg-primary rounded-xl p-2">
             <FaGoogle className="text-primary-foreground" />
           </div>

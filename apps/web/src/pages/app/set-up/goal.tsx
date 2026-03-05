@@ -16,11 +16,12 @@ import {
   SelectValue,
   useCarousel,
 } from "@/components/ui";
-import type { SetUpProp } from "./useSetUp";
+import { goalParser, Goal } from "@/packages/schemas";
+import type { SetUpProps } from "./useSetUp";
 
-export function SetUpGoalPage({ formSetup }: SetUpProp) {
+export function SetUpGoalPage({ form }: SetUpProps) {
   const { scrollNext } = useCarousel();
-  const { setValue, watch } = formSetup;
+  const { setValue, watch } = form;
 
   return (
     <div className="flex flex-col items-center">
@@ -42,17 +43,7 @@ export function SetUpGoalPage({ formSetup }: SetUpProp) {
             <Select
               name="goal"
               value={watch("goal")}
-              onValueChange={(value) =>
-                setValue(
-                  "goal",
-                  value as
-                    | "lose_weight"
-                    | "gain_mass"
-                    | "gain_muscle"
-                    | "defined_body"
-                    | "other",
-                )
-              }
+              onValueChange={(value) => setValue("goal", value as Goal)}
             >
               <SelectTrigger className="w-full">
                 <SelectValue placeholder="Selecione seu objetivo" />
@@ -60,28 +51,26 @@ export function SetUpGoalPage({ formSetup }: SetUpProp) {
               <SelectContent>
                 <SelectGroup>
                   <SelectLabel>Objetivos</SelectLabel>
-                  <SelectItem value="lose_weight">Perder Peso</SelectItem>
-                  <SelectItem value="gain_mass">Ganhar Massa</SelectItem>
-                  <SelectItem value="gain_muscle">
-                    Ganhar Massa Muscular
-                  </SelectItem>
-                  <SelectItem value="defined_body">Corpo Definido</SelectItem>
-                  <SelectItem value="other">Outro</SelectItem>
+                  {Object.values(Goal).map((goal) => (
+                    <SelectItem key={goal} value={goal}>
+                      {goalParser(goal)}
+                    </SelectItem>
+                  ))}
                 </SelectGroup>
               </SelectContent>
             </Select>
 
-            {watch("goal") === "other" && (
+            {watch("goal") === Goal.OTHER && (
               <Field>
-                <FieldLabel htmlFor="goal_other">Outro Objetivo?</FieldLabel>
+                <FieldLabel htmlFor="goalOther">Outro Objetivo?</FieldLabel>
                 <Input
-                  id="goal_other"
+                  id="goalOther"
                   type="text"
                   placeholder="Digite seu objetivo"
                   className="input input-bordered w-full"
-                  value={watch("goal_other")}
+                  value={watch("goalOther")}
                   onChange={(event) =>
-                    setValue("goal_other", event.target.value)
+                    setValue("goalOther", event.target.value)
                   }
                 />
               </Field>

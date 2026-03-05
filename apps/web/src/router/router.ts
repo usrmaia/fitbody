@@ -17,6 +17,17 @@ import { NotificationsPage } from "@/pages/app/notifications";
 import { SearchPage } from "@/pages/app/search";
 import { MarketingPage } from "@/pages/(marketing)";
 import { ProtectedRoute } from "./providers";
+import { WorkoutPlansPage } from "@/pages/app/workout-plans";
+import { ExercisesPage } from "@/pages/app/exercises";
+import { ExercisePage } from "@/pages/app/exercises/[exerciseId]";
+import { AppPageLoader } from "@/pages/app/loader";
+import { WorkoutPlansLoader } from "@/pages/app/workout-plans/loader";
+import { WorkoutPlanPage } from "@/pages/app/workout-plans/[workoutPlanId]";
+import { WorkoutPlanLoader } from "@/pages/app/workout-plans/[workoutPlanId]/loader";
+import { WorkoutDayIdLoader } from "@/pages/app/workout-plans/[workoutPlanId]/workout-days/[workoutDayId]/loader";
+import { WorkoutDayPage } from "@/pages/app/workout-plans/[workoutPlanId]/workout-days/[workoutDayId]";
+import { ExercisesLoader } from "@/pages/app/exercises/loader";
+import { ExerciseLoader } from "@/pages/app/exercises/[exerciseId]/loader";
 
 export const router = createBrowserRouter([
   {
@@ -51,11 +62,22 @@ export const router = createBrowserRouter([
   },
   {
     path: "app",
+    loader: AppPageLoader,
     Component: ProtectedRoute,
     children: [
       {
         Component: LayoutMain,
         children: [
+          {
+            path: "exercises/:exerciseId",
+            loader: ExerciseLoader,
+            Component: ExercisePage,
+          },
+          {
+            path: "exercises",
+            loader: ExercisesLoader,
+            Component: ExercisesPage,
+          },
           {
             path: "home",
             Component: HomePage,
@@ -92,6 +114,21 @@ export const router = createBrowserRouter([
           {
             path: "set-up",
             Component: SetUpPage,
+          },
+          {
+            path: "workout-plans/:workoutPlanId/workout-days/:workoutDayId",
+            loader: WorkoutDayIdLoader,
+            Component: WorkoutDayPage,
+          },
+          {
+            path: "workout-plans/:workoutPlanId",
+            loader: WorkoutPlanLoader,
+            Component: WorkoutPlanPage,
+          },
+          {
+            path: "workout-plans",
+            loader: WorkoutPlansLoader,
+            Component: WorkoutPlansPage,
           },
         ],
       },

@@ -1,17 +1,18 @@
-import { BackButtonNavigation, Label } from "@/components/ui";
 import { AtSign, ChevronRight } from "lucide-react";
 import { NavLink } from "react-router";
-import { ProfileEditUserForm } from "./user-form";
+
+import { BackButtonNavigation, Label } from "@/components/ui";
 import { ProfileEditFitForm } from "./fit-form";
+import { ProfileEditUserForm } from "./user-form";
 
 export function ProfileEditPage() {
   return (
-    <div className="mt-5">
+    <>
       <BackButtonNavigation title="Perfil" />
       <NavMenuItens />
       <ProfileEditUserForm />
       <ProfileEditFitForm />
-    </div>
+    </>
   );
 }
 
@@ -25,7 +26,7 @@ function NavMenuItens() {
   ];
 
   return (
-    <div className="mt-5 flex flex-col gap-4 px-8">
+    <div className="flex flex-col gap-4 px-8">
       {menuItems.map((item) => (
         <NavLink
           key={item.label}
