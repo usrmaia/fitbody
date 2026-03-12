@@ -3,6 +3,7 @@ export * from "./exercise.schema";
 export * from "./user.api.schema";
 export * from "./user.schema";
 export * from "./workout-plan.api.schema";
+export * from "./workout-session.api.schema";
 export * from "./workout.schema";
 
 import z from "zod";

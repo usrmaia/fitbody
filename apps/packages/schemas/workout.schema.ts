@@ -118,50 +118,33 @@ export const workoutPlanSchema = z.object({
 });
 export type WorkoutPlan = z.infer<typeof workoutPlanSchema>;
 
-export const workoutSessionSchema = z.object({
-  id: z.string().optional(),
-  notes: z
-    .string()
-    .max(1024, "Anotação não pode exceder 1024 caracteres")
-    .optional(),
-  startedAt: z.date().optional(),
-  endedAt: z.date().optional(),
-
-  workoutDayId: z.string(),
-  userId: z.string(),
-
-  createdAt: z.date().optional(),
-  updatedAt: z.date().optional(),
-});
-export type WorkoutSession = z.infer<typeof workoutSessionSchema>;
-
 export const workoutSetSchema = z.object({
-  id: z.string().optional(),
-  reps: z.number().int().optional(),
-  weight: z
+  id: z.ulid().optional(),
+  reps: z.coerce.number().int().optional(),
+  weight: z.coerce
     .number()
     .min(0, "O peso não pode ser negativo")
     .max(1000, "O peso não pode exceder 1000")
     .optional(),
   weightUnit: weightUnitSchema.optional(),
-  timeInSeconds: z
+  timeInSeconds: z.coerce
     .number()
     .min(0, "O tempo não pode ser negativo")
     .max(3600, "O tempo não pode exceder 3600 segundos (1 hora)")
     .int()
     .optional(),
-  rpe: z
+  rpe: z.coerce
     .number()
     .min(0, "O RPE não pode ser negativo")
     .max(100, "O RPE não pode exceder 100")
     .optional(),
-  rir: z
+  rir: z.coerce
     .number()
     .int()
     .min(0, "O RIR não pode ser negativo")
     .max(30, "O RIR não pode exceder 30")
     .optional(),
-  seq: z
+  seq: z.coerce
     .number()
     .int()
     .min(0, "A sequência não pode ser negativa")
@@ -172,10 +155,31 @@ export const workoutSetSchema = z.object({
     .max(1024, "Anotação não pode exceder 1024 caracteres")
     .optional(),
 
-  workoutSessionId: z.string(),
-  exerciseId: z.string(),
+  workoutSessionId: z.ulid(),
+  exerciseId: z.ulid(),
+  exercise: exerciseSchema.optional(),
 
   createdAt: z.date().optional(),
   updatedAt: z.date().optional(),
 });
 export type WorkoutSet = z.infer<typeof workoutSetSchema>;
+
+export const workoutSessionSchema = z.object({
+  id: z.ulid().optional(),
+  notes: z
+    .string()
+    .max(1024, "Anotação não pode exceder 1024 caracteres")
+    .optional(),
+  startedAt: z.coerce.date(),
+  endedAt: z.coerce.date().optional(),
+  visibility: visibilitySchema.optional(),
+
+  workoutDayId: z.string(),
+  userId: z.string(),
+
+  createdAt: z.coerce.date().optional(),
+  updatedAt: z.coerce.date().optional(),
+
+  workoutSets: workoutSetSchema.array(),
+});
+export type WorkoutSession = z.infer<typeof workoutSessionSchema>;
