@@ -175,7 +175,9 @@ export const workoutSessionSchema = z.object({
   visibility: visibilitySchema.optional(),
 
   workoutDayId: z.string(),
+  workoutDay: workoutDaySchema.optional(),
   userId: z.string(),
+  user: userSchema.optional(),
 
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional(),

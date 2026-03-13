@@ -16,7 +16,10 @@ export type WorkoutSetsQueryOptions = z.infer<
   typeof workoutSetsQueryOptionsSchema
 >;
 
-export const workoutSessionBodySchema = workoutSessionSchema;
+export const workoutSessionBodySchema = workoutSessionSchema.omit({
+  user: true,
+  workoutDay: true,
+});
 export type WorkoutSessionBody = z.infer<typeof workoutSessionBodySchema>;
 
 export const workoutDayParamsSchema = z.object({
