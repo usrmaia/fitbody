@@ -1,4 +1,8 @@
 import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
   Button,
   Field,
   FieldDescription,
@@ -23,7 +27,7 @@ import {
   WeightUnit,
   weightUnitParser,
 } from "@/packages/schemas";
-import { ExerciseCard } from "../../exercises/component";
+import { ExerciseAvatar } from "../../exercises/component";
 import { Check } from "lucide-react";
 
 export function WorkoutSessionForm({
@@ -130,143 +134,188 @@ export function WorkoutSessionForm({
           </FieldDescription>
           {watch("workoutSets")?.map((_, index) => (
             <FieldGroup className="rounded-2xl border p-4" key={index}>
-              <ExerciseCard {...getValues(`workoutSets.${index}.exercise`)!} />
+              <ExerciseAvatar
+                exercise={getValues(`workoutSets.${index}.exercise`)!}
+              />
+              <Accordion
+                type="multiple"
+                className="w-full"
+                defaultValue={
+                  getValues(`workoutSets.${index}.notes`) ? ["notes"] : []
+                }
+              >
+                <AccordionItem value="notes">
+                  <AccordionTrigger>Observações da série</AccordionTrigger>
+                  <AccordionContent>
+                    <FieldGroup>
+                      <Field>
+                        <FieldLabel>Observações da série</FieldLabel>
+                        <FieldDescription>
+                          Registre técnica, sensação ou ajuste para a próxima
+                          vez.
+                        </FieldDescription>
+                        <Textarea
+                          {...register(`workoutSets.${index}.notes`)}
+                          placeholder="Ex.: Execução estável, subir 2 kg na próxima."
+                        />
+                        <FieldError>
+                          {errors.workoutSets?.[index]?.notes?.message}
+                        </FieldError>
+                      </Field>
+                    </FieldGroup>
+                  </AccordionContent>
+                </AccordionItem>
+              </Accordion>
 
-              <Field>
-                <FieldLabel>Repetições</FieldLabel>
-                <FieldDescription>
-                  Quantas repetições você completou nesta série.
-                </FieldDescription>
-                <Input
-                  {...register(`workoutSets.${index}.reps`)}
-                  placeholder="Ex.: 10"
-                />
-                <FieldError>
-                  {errors.workoutSets?.[index]?.reps?.message}
-                </FieldError>
-              </Field>
+              <FieldGroup className="flex-row">
+                <Field>
+                  <FieldLabel>Repetições</FieldLabel>
+                  <FieldDescription>
+                    Quantas repetições você completou nesta série.
+                  </FieldDescription>
+                  <Input
+                    {...register(`workoutSets.${index}.reps`)}
+                    placeholder="Ex.: 10"
+                  />
+                  <FieldError>
+                    {errors.workoutSets?.[index]?.reps?.message}
+                  </FieldError>
+                </Field>
 
-              <Field>
-                <FieldLabel>Carga</FieldLabel>
-                <FieldDescription>
-                  Informe o peso usado nesta série.
-                </FieldDescription>
-                <Input
-                  {...register(`workoutSets.${index}.weight`)}
-                  placeholder="Ex.: 40"
-                />
-                <FieldError>
-                  {errors.workoutSets?.[index]?.weight?.message}
-                </FieldError>
-              </Field>
+                <Field>
+                  <FieldLabel>Carga</FieldLabel>
+                  <FieldDescription>
+                    Informe o peso usado nesta série.
+                  </FieldDescription>
+                  <Input
+                    {...register(`workoutSets.${index}.weight`)}
+                    placeholder="Ex.: 40"
+                  />
+                  <FieldError>
+                    {errors.workoutSets?.[index]?.weight?.message}
+                  </FieldError>
+                </Field>
+              </FieldGroup>
 
-              <Field>
-                <FieldLabel>Unidade da carga</FieldLabel>
-                <Controller
-                  name={`workoutSets.${index}.weightUnit`}
-                  control={control}
-                  render={({ field, fieldState }) => (
-                    <Select
-                      value={field.value ?? ""}
-                      onValueChange={field.onChange}
-                    >
-                      <SelectTrigger
-                        aria-invalid={fieldState.invalid}
-                        className="w-full"
-                      >
-                        <SelectValue placeholder="Escolha a unidade" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectGroup>
-                          <SelectLabel>Unidades disponíveis</SelectLabel>
-                          {Object.values(WeightUnit).map((value) => (
-                            <SelectItem key={value} value={value}>
-                              {weightUnitParser(value)}
-                            </SelectItem>
-                          ))}
-                        </SelectGroup>
-                      </SelectContent>
-                    </Select>
-                  )}
-                />
-                <FieldError
-                  errors={[
-                    {
-                      message: errors.workoutSets?.[index]?.weightUnit?.message,
-                    },
-                  ]}
-                />
-              </Field>
+              <Accordion
+                type="multiple"
+                className="w-full"
+                defaultValue={
+                  getValues(`workoutSets.${index}.timeInSeconds`) ||
+                  getValues(`workoutSets.${index}.rpe`) ||
+                  getValues(`workoutSets.${index}.rir`) ||
+                  getValues(`workoutSets.${index}.weightUnit`)
+                    ? ["other-info"]
+                    : []
+                }
+              >
+                <AccordionItem value="other-info">
+                  <AccordionTrigger>
+                    Outras informações (opcional)
+                  </AccordionTrigger>
+                  <AccordionContent>
+                    <FieldGroup>
+                      <Field>
+                        <FieldLabel>Tempo (segundos)</FieldLabel>
+                        <FieldDescription>
+                          Use para exercícios cronometrados, como prancha.
+                        </FieldDescription>
+                        <Input
+                          {...register(`workoutSets.${index}.timeInSeconds`)}
+                          placeholder="Ex.: 60"
+                        />
+                        <FieldError>
+                          {errors.workoutSets?.[index]?.timeInSeconds?.message}
+                        </FieldError>
+                      </Field>
 
-              <Field>
-                <FieldLabel>Tempo (segundos)</FieldLabel>
-                <FieldDescription>
-                  Use para exercícios cronometrados, como prancha.
-                </FieldDescription>
-                <Input
-                  {...register(`workoutSets.${index}.timeInSeconds`)}
-                  placeholder="Ex.: 60"
-                />
-                <FieldError>
-                  {errors.workoutSets?.[index]?.timeInSeconds?.message}
-                </FieldError>
-              </Field>
+                      <Field>
+                        <FieldLabel>RPE (1-10)</FieldLabel>
+                        <FieldDescription>
+                          Nível de esforço percebido ao final da série.
+                        </FieldDescription>
+                        <Input
+                          {...register(`workoutSets.${index}.rpe`)}
+                          placeholder="Ex.: 8"
+                        />
+                        <FieldError>
+                          {errors.workoutSets?.[index]?.rpe?.message}
+                        </FieldError>
+                      </Field>
 
-              <Field>
-                <FieldLabel>RPE (1-10)</FieldLabel>
-                <FieldDescription>
-                  Nível de esforço percebido ao final da série.
-                </FieldDescription>
-                <Input
-                  {...register(`workoutSets.${index}.rpe`)}
-                  placeholder="Ex.: 8"
-                />
-                <FieldError>
-                  {errors.workoutSets?.[index]?.rpe?.message}
-                </FieldError>
-              </Field>
+                      <Field>
+                        <FieldLabel>RIR</FieldLabel>
+                        <FieldDescription>
+                          Quantas repetições ainda caberiam com boa execução.
+                        </FieldDescription>
+                        <Input
+                          {...register(`workoutSets.${index}.rir`)}
+                          placeholder="Ex.: 2"
+                        />
+                        <FieldError>
+                          {errors.workoutSets?.[index]?.rir?.message}
+                        </FieldError>
+                      </Field>
 
-              <Field>
-                <FieldLabel>RIR</FieldLabel>
-                <FieldDescription>
-                  Quantas repetições ainda caberiam com boa execução.
-                </FieldDescription>
-                <Input
-                  {...register(`workoutSets.${index}.rir`)}
-                  placeholder="Ex.: 2"
-                />
-                <FieldError>
-                  {errors.workoutSets?.[index]?.rir?.message}
-                </FieldError>
-              </Field>
+                      <Field>
+                        <FieldLabel>Unidade da carga</FieldLabel>
+                        <Controller
+                          name={`workoutSets.${index}.weightUnit`}
+                          control={control}
+                          render={({ field, fieldState }) => (
+                            <Select
+                              value={field.value ?? ""}
+                              onValueChange={field.onChange}
+                            >
+                              <SelectTrigger
+                                aria-invalid={fieldState.invalid}
+                                className="w-full"
+                              >
+                                <SelectValue placeholder="Escolha a unidade" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectGroup>
+                                  <SelectLabel>
+                                    Unidades disponíveis
+                                  </SelectLabel>
+                                  {Object.values(WeightUnit).map((value) => (
+                                    <SelectItem key={value} value={value}>
+                                      {weightUnitParser(value)}
+                                    </SelectItem>
+                                  ))}
+                                </SelectGroup>
+                              </SelectContent>
+                            </Select>
+                          )}
+                        />
+                        <FieldError
+                          errors={[
+                            {
+                              message:
+                                errors.workoutSets?.[index]?.weightUnit
+                                  ?.message,
+                            },
+                          ]}
+                        />
+                      </Field>
 
-              <Field>
-                <FieldLabel>Ordem da série</FieldLabel>
-                <FieldDescription>
-                  Número da série dentro do exercício.
-                </FieldDescription>
-                <Input
-                  {...register(`workoutSets.${index}.seq`)}
-                  placeholder="Ex.: 1"
-                />
-                <FieldError>
-                  {errors.workoutSets?.[index]?.seq?.message}
-                </FieldError>
-              </Field>
-
-              <Field>
-                <FieldLabel>Observações da série</FieldLabel>
-                <FieldDescription>
-                  Registre técnica, sensação ou ajuste para a próxima vez.
-                </FieldDescription>
-                <Input
-                  {...register(`workoutSets.${index}.notes`)}
-                  placeholder="Ex.: Execução estável, subir 2 kg na próxima."
-                />
-                <FieldError>
-                  {errors.workoutSets?.[index]?.notes?.message}
-                </FieldError>
-              </Field>
+                      <Field>
+                        <FieldLabel>Ordem da série</FieldLabel>
+                        <FieldDescription>
+                          Número da série dentro do exercício.
+                        </FieldDescription>
+                        <Input
+                          {...register(`workoutSets.${index}.seq`)}
+                          placeholder="Ex.: 1"
+                        />
+                        <FieldError>
+                          {errors.workoutSets?.[index]?.seq?.message}
+                        </FieldError>
+                      </Field>
+                    </FieldGroup>
+                  </AccordionContent>
+                </AccordionItem>
+              </Accordion>
             </FieldGroup>
           ))}
         </FieldGroup>

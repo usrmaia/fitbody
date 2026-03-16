@@ -14,7 +14,7 @@ export function ExercisesPage() {
       </div>
       <div className="mt-5 grid grid-cols-2 gap-4 px-8">
         {exercises.map((exercise) => (
-          <ExerciseCard key={exercise.id} {...exercise} />
+          <ExerciseCard key={exercise.id} exercise={exercise} />
         ))}
       </div>
     </>

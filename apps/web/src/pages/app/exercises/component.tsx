@@ -3,6 +3,8 @@ import { NavLink } from "react-router";
 
 import { ExerciseForm } from "./[exerciseId]/form";
 import {
+  Avatar,
+  AvatarImage,
   Card,
   CardContent,
   CardDescription,
@@ -20,7 +22,30 @@ import { ExercisesSearchForm } from "./searchForm";
 
 import defaultExerciseThumbnail from "@/assets/images/default-exercise.jpg";
 
-export function ExerciseCard(exercise: Exercise) {
+export function ExerciseAvatar({ exercise }: { exercise: Exercise }) {
+  return (
+    <div className="flex gap-4">
+      <Avatar size="lg">
+        <AvatarImage
+          src={exercise.image || defaultExerciseThumbnail}
+          alt={exercise.name}
+          className="h-24 w-full rounded-t-xl object-cover"
+          style={{
+            backgroundImage: `
+          linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1)),
+          radial-gradient(ellipse at center, transparent 0%, rgba(0, 0, 0, 0.5) 100%),
+          `,
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+          }}
+        />
+      </Avatar>
+      <Label className="text-sm">{exercise.name}</Label>
+    </div>
+  );
+}
+
+export function ExerciseCard({ exercise }: { exercise: Exercise }) {
   const muscleGroups =
     exercise.exerciseMuscleGroups
       ?.filter((emg) => emg.role === "PRIMARY")

@@ -15,7 +15,11 @@ export const WorkoutSessionsLoader = async () => {
       orderBy: [{ startedAt: "asc" }],
     }),
     getWorkoutPlans({
-      include: { workoutDays: true },
+      include: {
+        workoutDays: {
+          include: { workoutDayExercises: { include: { exercise: true } } },
+        },
+      },
       orderBy: [{ name: "asc" }],
     }),
   ]);

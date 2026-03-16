@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form";
 
 import { useWorkoutPlan, useWorkoutSession } from "@/store";
 import { workoutSessionSchema, type WorkoutSession } from "@/packages/schemas";
+import { formatDateTimeForLocal } from "@/utils";
 
 export type Props = {
   mode: "add" | "edit";
@@ -43,9 +44,12 @@ export const useWorkoutSessionForm = ({
             workoutDayId,
             workoutDay,
             userId,
+            startedAt: formatDateTimeForLocal(new Date()),
+            endedAt: formatDateTimeForLocal(new Date()),
             workoutSets: workoutDay?.workoutDayExercises?.map((wde) => ({
               exerciseId: wde.exerciseId,
               exercise: wde.exercise,
+              seq: wde.seq,
             })),
             // Pre-fill the form with data from the previous session of the same workout day, if available
             ...prevWorkoutSession,
