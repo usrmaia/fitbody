@@ -20,6 +20,7 @@ export default defineConfig([
       globals: globals.browser,
     },
     rules: {
+      "react-refresh/only-export-components": "warn",
       "@typescript-eslint/no-extra-non-null-assertion": "off",
     },
   },

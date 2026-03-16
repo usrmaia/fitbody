@@ -2,6 +2,7 @@ import {
   Apple,
   BicepsFlexed,
   Dumbbell,
+  NotepadText,
   SquareChartGantt,
   Star,
   Users,
@@ -30,8 +31,11 @@ function IconLabelInfo({
 export function NavigationMenu() {
   return (
     <div className="mt-4 flex h-20 items-center gap-4 overflow-auto px-8">
-      <NavLink to="/app/workout-plans">
+      <NavLink to="/app/workout-sessions">
         <IconLabelInfo title="Treino" Icon={Dumbbell} />
+      </NavLink>
+      <NavLink to="/app/workout-plans">
+        <IconLabelInfo title="Planos" Icon={NotepadText} />
       </NavLink>
       <Separator orientation="vertical" />
       <NavLink to="/app/exercises">

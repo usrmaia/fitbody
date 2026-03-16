@@ -22,7 +22,7 @@ export function BackButtonNavigation(props: {
           size="sm"
           className="relative w-full overflow-hidden"
         >
-          <ChevronLeft size={24} className="text-primary absolute left-4" />
+          <ChevronLeft size={24} className="text-primary absolute left-8" />
           <Label className="text-primary block w-full truncate px-8 text-lg font-bold">
             {props.title}
           </Label>

@@ -92,7 +92,10 @@ export default async function workoutPlanRoute(app: FastifyInstance) {
       if (!sessionUser) throw new Unauthorized();
 
       const args = req.query;
-      const plans = await getWorkoutPlans(args, sessionUser?.user);
+      console.log("args", args);
+      const plans = await getWorkoutPlans(args, sessionUser.user);
+
+      console.log("plans", plans);
 
       const result: Result = {
         success: true,
@@ -170,7 +173,7 @@ export default async function workoutPlanRoute(app: FastifyInstance) {
       const plan = await updateWorkoutPlan(
         workoutPlanId,
         { include, data },
-        sessionUser?.user,
+        sessionUser.user,
       );
 
       if (!plan) throw new NotFound("WORKOUTPLAN_NOT_FOUND");
@@ -381,7 +384,7 @@ export default async function workoutPlanRoute(app: FastifyInstance) {
         workoutPlanId,
         workoutDayId,
         { include, data },
-        sessionUser?.user,
+        sessionUser.user,
       );
 
       if (!day) throw new NotFound("WORKOUTDAY_NOT_FOUND");
@@ -424,7 +427,7 @@ export default async function workoutPlanRoute(app: FastifyInstance) {
         workoutPlanId,
         workoutDayId,
         { include },
-        sessionUser?.user,
+        sessionUser.user,
       );
 
       if (!day) throw new NotFound("WORKOUTDAY_NOT_FOUND");
@@ -469,7 +472,7 @@ export default async function workoutPlanRoute(app: FastifyInstance) {
         workoutDayId,
         workoutDayExerciseId,
         { include },
-        sessionUser?.user,
+        sessionUser.user,
       );
 
       if (!exercise) throw new NotFound("WORKOUTDAYEXERCISE_NOT_FOUND");

@@ -28,6 +28,10 @@ import { WorkoutDayIdLoader } from "@/pages/app/workout-plans/[workoutPlanId]/wo
 import { WorkoutDayPage } from "@/pages/app/workout-plans/[workoutPlanId]/workout-days/[workoutDayId]";
 import { ExercisesLoader } from "@/pages/app/exercises/loader";
 import { ExerciseLoader } from "@/pages/app/exercises/[exerciseId]/loader";
+import { WorkoutSessionPage } from "@/pages/app/workout-sessions/[workoutSessionId]";
+import { WorkoutSessionLoader } from "@/pages/app/workout-sessions/[workoutSessionId]/loader";
+import { WorkoutSessionsPage } from "@/pages/app/workout-sessions";
+import { WorkoutSessionsLoader } from "@/pages/app/workout-sessions/loader";
 
 export const router = createBrowserRouter([
   {
@@ -64,6 +68,7 @@ export const router = createBrowserRouter([
     path: "app",
     loader: AppPageLoader,
     Component: ProtectedRoute,
+
     children: [
       {
         Component: LayoutMain,
@@ -129,6 +134,16 @@ export const router = createBrowserRouter([
             path: "workout-plans",
             loader: WorkoutPlansLoader,
             Component: WorkoutPlansPage,
+          },
+          {
+            path: "workout-sessions/:workoutSessionId",
+            loader: WorkoutSessionLoader,
+            Component: WorkoutSessionPage,
+          },
+          {
+            path: "workout-sessions",
+            loader: WorkoutSessionsLoader,
+            Component: WorkoutSessionsPage,
           },
         ],
       },

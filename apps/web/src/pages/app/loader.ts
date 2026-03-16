@@ -1,16 +1,7 @@
-import { authClient } from "@/lib/auth-client";
-import { useProfile } from "@/store";
+import { ensureProfile } from "./ensure-profile";
 
 export const AppPageLoader = async () => {
-  const { data: userSession } = await authClient.getSession();
-
-  if (!userSession?.user?.id) return null;
-
-  const { getProfile } = useProfile.getState();
-
-  await getProfile(userSession.user.id, {
-    include: { user: true },
-  });
+  await ensureProfile();
 
   return null;
 };
