@@ -45,7 +45,6 @@ export const useWorkoutSessionForm = ({
             workoutDay,
             userId,
             startedAt: formatDateTimeForLocal(new Date()),
-            endedAt: formatDateTimeForLocal(new Date()),
             workoutSets: workoutDay?.workoutDayExercises?.map((wde) => ({
               exerciseId: wde.exerciseId,
               exercise: wde.exercise,
@@ -57,6 +56,8 @@ export const useWorkoutSessionForm = ({
         : undefined,
     values: mode === "edit" ? workoutSession! : undefined,
   });
+
+  console.log("form errors", form.formState.errors);
 
   const onSubmit = form.handleSubmit(async (data: WorkoutSession) => {
     let res;

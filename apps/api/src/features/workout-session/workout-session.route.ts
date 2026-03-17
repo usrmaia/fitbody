@@ -3,15 +3,15 @@ import { NotFound, Unauthorized } from "http-errors";
 
 import {
   resultSchema,
+  Result,
   workoutSessionBodySchema,
   WorkoutSessionBody,
   workoutSessionQueryOptionsSchema,
   WorkoutSessionQueryOptions,
-  workoutDayParamsSchema,
-  WorkoutDayParams,
-  WorkoutSessionParamsSchema,
+  WorkoutSessionParams,
   workoutSessionParamsSchema,
-  Result,
+  WorkoutSessionPostParams,
+  workoutSessionPostParamsSchema,
 } from "@/packages/schemas";
 import {
   createWorkoutSession,
@@ -22,7 +22,7 @@ import {
 
 export default async function workoutSessionRoute(app: FastifyInstance) {
   app.get<{
-    Params: WorkoutSessionParamsSchema;
+    Params: WorkoutSessionParams;
     Querystring: WorkoutSessionQueryOptions;
   }>(
     "/workout-sessions/:workoutSessionId",
@@ -90,7 +90,7 @@ export default async function workoutSessionRoute(app: FastifyInstance) {
 
   app.post<{
     Body: WorkoutSessionBody;
-    Params: WorkoutDayParams;
+    Params: WorkoutSessionPostParams;
     Querystring: WorkoutSessionQueryOptions;
   }>(
     "/workout-sessions/:workoutDayId",
@@ -100,7 +100,7 @@ export default async function workoutSessionRoute(app: FastifyInstance) {
           "Cria uma nova sessão de treino para um dia de treino específico.",
         tags: ["WorkoutSessions"],
         body: workoutSessionBodySchema,
-        params: workoutDayParamsSchema,
+        params: workoutSessionPostParamsSchema,
         querystring: workoutSessionQueryOptionsSchema,
         response: {
           200: resultSchema(workoutSessionBodySchema),
@@ -134,7 +134,7 @@ export default async function workoutSessionRoute(app: FastifyInstance) {
 
   app.patch<{
     Body: WorkoutSessionBody;
-    Params: WorkoutSessionParamsSchema;
+    Params: WorkoutSessionParams;
     Querystring: WorkoutSessionQueryOptions;
   }>(
     "/workout-sessions/:workoutSessionId",

@@ -20,6 +20,7 @@ export const WorkoutSessionsLoader = async () => {
           include: { workoutDayExercises: { include: { exercise: true } } },
         },
       },
+      where: { createdById: profile.userId },
       orderBy: [{ name: "asc" }],
     }),
   ]);

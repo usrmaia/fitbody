@@ -155,7 +155,7 @@ export const workoutSetSchema = z.object({
     .max(1024, "Anotação não pode exceder 1024 caracteres")
     .optional(),
 
-  workoutSessionId: z.ulid(),
+  workoutSessionId: z.ulid().optional(),
   exerciseId: z.ulid(),
   exercise: exerciseSchema.optional(),
 
@@ -171,7 +171,10 @@ export const workoutSessionSchema = z.object({
     .max(1024, "Anotação não pode exceder 1024 caracteres")
     .optional(),
   startedAt: z.coerce.date(),
-  endedAt: z.coerce.date().optional(),
+  endedAt: z.preprocess(
+    (value) => (value == null || value === "" ? undefined : value),
+    z.coerce.date().optional(),
+  ),
   visibility: visibilitySchema.optional(),
 
   workoutDayId: z.string(),

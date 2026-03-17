@@ -22,6 +22,13 @@ export const workoutSessionBodySchema = workoutSessionSchema.omit({
 });
 export type WorkoutSessionBody = z.infer<typeof workoutSessionBodySchema>;
 
+export const workoutSessionPostParamsSchema = z.object({
+  workoutDayId: z.string(),
+});
+export type WorkoutSessionPostParams = z.infer<
+  typeof workoutSessionPostParamsSchema
+>;
+
 export const workoutDayParamsSchema = z.object({
   workoutDayId: z.uuid(),
 });
@@ -30,9 +37,7 @@ export type WorkoutDayParams = z.infer<typeof workoutDayParamsSchema>;
 export const workoutSessionParamsSchema = z.object({
   workoutSessionId: z.uuid(),
 });
-export type WorkoutSessionParamsSchema = z.infer<
-  typeof workoutSessionParamsSchema
->;
+export type WorkoutSessionParams = z.infer<typeof workoutSessionParamsSchema>;
 
 export const workoutSessionQueryOptionsSchema = z.object({
   include: z

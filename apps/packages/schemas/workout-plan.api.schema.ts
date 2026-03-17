@@ -78,6 +78,7 @@ export const workoutPlanQueryOptionsSchema = z.object({
     .object({
       name: z.any().optional(),
       description: z.any().optional(),
+      createdById: z.any().optional(),
     })
     .optional(),
   orderBy: z

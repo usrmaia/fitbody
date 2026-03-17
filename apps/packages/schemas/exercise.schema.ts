@@ -116,7 +116,7 @@ export const exerciseSchema = z.object({
   video: z
     .union([z.url("URL do vídeo do exercício inválida"), z.string()])
     .nullish(),
-  visibility: visibilitySchema.optional(),
+  visibility: visibilitySchema.nullish(),
 
   createdById: z.string(),
   createdBy: userSchema.optional(),

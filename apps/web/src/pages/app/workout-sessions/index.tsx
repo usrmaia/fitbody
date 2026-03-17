@@ -1,10 +1,12 @@
 import {
   BackButtonNavigation,
+  Button,
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
+  Label,
   Select,
   SelectContent,
   SelectGroup,
@@ -17,6 +19,7 @@ import { useProfile, useWorkoutPlan, useWorkoutSession } from "@/store";
 import { Plus, Search } from "lucide-react";
 import { useState } from "react";
 import { WorkoutSessionForm } from "./[workoutSessionId]/form";
+import { NavLink } from "react-router";
 
 export function WorkoutSessionsPage() {
   const { profile } = useProfile();
@@ -28,13 +31,32 @@ export function WorkoutSessionsPage() {
 
   if (!profile || !profile.userId) return null;
 
+  if (workoutPlans.length === 0)
+    return (
+      <>
+        <BackButtonNavigation title="" />
+        <div className="mt-5 flex w-full flex-col justify-end gap-4 overflow-x-auto px-8">
+          <Label className="text-center">
+            Ops! Parece que você não possui nenhum treino disponível. Crie ou
+            clone um treino para começar a registrar suas sessões de treino.
+          </Label>
+          <NavLink to="/app/workout-plans/new" className="w-full">
+            <Button variant="link" className="w-full">
+              Adicionar Treino
+              <Plus className="mr-2 h-4 w-4" />
+            </Button>
+          </NavLink>
+        </div>
+      </>
+    );
+
   return (
     <>
       <BackButtonNavigation title="" />
       <div className="flex w-full justify-end gap-4 px-8">
         <Search className="text-primary h-5 w-5" />
       </div>
-      <div className="flex w-full flex-col justify-end gap-4 overflow-x-auto px-8">
+      <div className="mt-5 flex w-full flex-col justify-end gap-4 overflow-x-auto px-8">
         <Select value={workoutPlanId} onValueChange={setWorkoutPlanId}>
           <SelectTrigger className="w-full">
             <SelectValue placeholder="Selecione o treino" />
@@ -80,9 +102,7 @@ export function WorkoutSessionsPage() {
           </Select>
         )}
         {workoutPlanId && workoutDayId && (
-          <>
-            <DialogPlus userId={profile.userId} workoutDayId={workoutDayId} />
-          </>
+          <DialogPlus userId={profile.userId} workoutDayId={workoutDayId} />
         )}
       </div>
       <div className="mt-5 grid grid-cols-2 gap-4 px-8">
@@ -97,18 +117,19 @@ export function WorkoutSessionsPage() {
 }
 
 export function DialogPlus({
-  className,
   userId,
   workoutDayId,
 }: {
-  className?: string;
   userId: string;
   workoutDayId: string;
 }) {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Plus className={className} />
+        <Button variant="outline">
+          Adicionar Sessão de Treino
+          <Plus className="mr-2 h-4 w-4" />
+        </Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>

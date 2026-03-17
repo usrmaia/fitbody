@@ -17,6 +17,7 @@ import {
   SelectLabel,
   SelectTrigger,
   SelectValue,
+  Spinner,
   Textarea,
 } from "@/components/ui";
 import { type Props, useWorkoutSessionForm } from "./useForm";
@@ -39,7 +40,7 @@ export function WorkoutSessionForm({
 }: Props) {
   const {
     control,
-    formState: { errors, isSubmitting },
+    formState: { errors, isSubmitting, isSubmitSuccessful },
     getValues,
     onSubmit,
     register,
@@ -55,77 +56,6 @@ export function WorkoutSessionForm({
   return (
     <form onSubmit={onSubmit}>
       <FieldGroup>
-        <Field>
-          <FieldLabel>Resumo da sessão</FieldLabel>
-          <FieldDescription>
-            Anote como foi o treino e o que você quer melhorar no próximo.
-          </FieldDescription>
-          <Textarea
-            {...register("notes")}
-            placeholder="Ex.: Hoje rendi bem no supino, mas senti o agachamento pesado."
-          />
-          <FieldError>{errors.notes?.message}</FieldError>
-        </Field>
-
-        <Field>
-          <FieldLabel>Início da sessão</FieldLabel>
-          <FieldDescription>
-            Marque quando você começou o treino.
-          </FieldDescription>
-          <Input
-            type="datetime-local"
-            {...register("startedAt")}
-            placeholder="Selecione a data e hora"
-          />
-          <FieldError>{errors.startedAt?.message}</FieldError>
-        </Field>
-
-        <Field>
-          <FieldLabel>Fim da sessão</FieldLabel>
-          <FieldDescription>
-            Marque quando você finalizou o treino.
-          </FieldDescription>
-          <Input
-            type="datetime-local"
-            {...register("endedAt")}
-            placeholder="Selecione a data e hora"
-          />
-          <FieldError>{errors.endedAt?.message}</FieldError>
-        </Field>
-
-        <Field>
-          <FieldLabel>Visibilidade</FieldLabel>
-          <Controller
-            name="visibility"
-            control={control}
-            render={({ field, fieldState }) => (
-              <Select
-                name={field.name}
-                value={field.value?.toString() ?? ""}
-                onValueChange={field.onChange}
-              >
-                <SelectTrigger
-                  aria-invalid={fieldState.invalid}
-                  className="w-full"
-                >
-                  <SelectValue placeholder="Escolha quem pode ver esta sessão" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectGroup>
-                    <SelectLabel>Opções de visibilidade</SelectLabel>
-                    {Object.values(Visibility).map((value) => (
-                      <SelectItem key={value} value={value}>
-                        {visibilityParcer(value)}
-                      </SelectItem>
-                    ))}
-                  </SelectGroup>
-                </SelectContent>
-              </Select>
-            )}
-          />
-          <FieldError errors={[{ message: errors.visibility?.message }]} />
-        </Field>
-
         <FieldGroup>
           <FieldLabel>Registro por exercício</FieldLabel>
           <FieldDescription>
@@ -320,12 +250,84 @@ export function WorkoutSessionForm({
           ))}
         </FieldGroup>
 
+        <Field>
+          <FieldLabel>Resumo da sessão</FieldLabel>
+          <FieldDescription>
+            Anote como foi o treino e o que você quer melhorar no próximo.
+          </FieldDescription>
+          <Textarea
+            {...register("notes")}
+            placeholder="Ex.: Hoje rendi bem no supino, mas senti o agachamento pesado."
+          />
+          <FieldError>{errors.notes?.message}</FieldError>
+        </Field>
+
+        <Field>
+          <FieldLabel>Início da sessão</FieldLabel>
+          <FieldDescription>
+            Marque quando você começou o treino.
+          </FieldDescription>
+          <Input
+            type="datetime-local"
+            {...register("startedAt")}
+            placeholder="Selecione a data e hora"
+          />
+          <FieldError>{errors.startedAt?.message}</FieldError>
+        </Field>
+
+        <Field>
+          <FieldLabel>Fim da sessão</FieldLabel>
+          <FieldDescription>
+            Marque quando você finalizou o treino.
+          </FieldDescription>
+          <Input
+            type="datetime-local"
+            {...register("endedAt")}
+            placeholder="Selecione a data e hora"
+          />
+          <FieldError>{errors.endedAt?.message}</FieldError>
+        </Field>
+
+        <Field>
+          <FieldLabel>Visibilidade</FieldLabel>
+          <Controller
+            name="visibility"
+            control={control}
+            render={({ field, fieldState }) => (
+              <Select
+                name={field.name}
+                value={field.value?.toString() ?? ""}
+                onValueChange={field.onChange}
+              >
+                <SelectTrigger
+                  aria-invalid={fieldState.invalid}
+                  className="w-full"
+                >
+                  <SelectValue placeholder="Escolha quem pode ver esta sessão" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectGroup>
+                    <SelectLabel>Opções de visibilidade</SelectLabel>
+                    {Object.values(Visibility).map((value) => (
+                      <SelectItem key={value} value={value}>
+                        {visibilityParcer(value)}
+                      </SelectItem>
+                    ))}
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
+            )}
+          />
+          <FieldError errors={[{ message: errors.visibility?.message }]} />
+        </Field>
+
         <FieldError
           className="text-center"
           errors={[{ message: errors.root?.message }]}
         />
-        <Button type="submit" disabled={isSubmitting}>
-          Salvar <Check />
+        <Button type="submit" disabled={isSubmitting || isSubmitSuccessful}>
+          {isSubmitSuccessful ? "Salvo" : "Salvar"}
+          {isSubmitting ? <Spinner /> : <Check />}
         </Button>
       </FieldGroup>
     </form>

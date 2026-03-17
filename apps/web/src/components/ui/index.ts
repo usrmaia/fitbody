@@ -15,6 +15,7 @@ export * from "./label";
 export * from "./nav";
 export * from "./select";
 export * from "./separator";
+export * from "./spinner";
 export * from "./textarea";
 export * from "./switch";
 //
