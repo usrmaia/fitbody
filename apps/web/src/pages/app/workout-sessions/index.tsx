@@ -1,11 +1,11 @@
+import { Plus, Search } from "lucide-react";
+import { useState } from "react";
+import { NavLink } from "react-router";
+
+import { WorkoutSessionDialog } from "./component";
 import {
   BackButtonNavigation,
   Button,
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
   Label,
   Select,
   SelectContent,
@@ -16,10 +16,6 @@ import {
   SelectValue,
 } from "@/components/ui";
 import { useProfile, useWorkoutPlan, useWorkoutSession } from "@/store";
-import { Plus, Search } from "lucide-react";
-import { useState } from "react";
-import { WorkoutSessionForm } from "./[workoutSessionId]/form";
-import { NavLink } from "react-router";
 
 export function WorkoutSessionsPage() {
   const { profile } = useProfile();
@@ -49,6 +45,12 @@ export function WorkoutSessionsPage() {
         </div>
       </>
     );
+
+  // workoutSessions é carregado ordenado por startedAt asc,
+  // então o último item com workoutDayId igual ao selecionado é a última sessão daquele dia
+  const prevWorkoutSession = workoutSessions.find(
+    (ws) => ws.workoutDayId === workoutDayId,
+  );
 
   return (
     <>
@@ -102,7 +104,11 @@ export function WorkoutSessionsPage() {
           </Select>
         )}
         {workoutPlanId && workoutDayId && (
-          <DialogPlus userId={profile.userId} workoutDayId={workoutDayId} />
+          <WorkoutSessionDialog
+            userId={profile.userId}
+            workoutDayId={workoutDayId}
+            prevWorkoutSession={prevWorkoutSession}
+          />
         )}
       </div>
       <div className="mt-5 grid grid-cols-2 gap-4 px-8">
@@ -113,36 +119,5 @@ export function WorkoutSessionsPage() {
         ))}
       </div>
     </>
-  );
-}
-
-export function DialogPlus({
-  userId,
-  workoutDayId,
-}: {
-  userId: string;
-  workoutDayId: string;
-}) {
-  return (
-    <Dialog>
-      <DialogTrigger asChild>
-        <Button variant="outline">
-          Adicionar Sessão de Treino
-          <Plus className="mr-2 h-4 w-4" />
-        </Button>
-      </DialogTrigger>
-      <DialogContent>
-        <DialogHeader>
-          <DialogTitle className="text-center">Adicionar Exercício</DialogTitle>
-        </DialogHeader>
-        <div className="xs:px-0 mx-3 max-h-[70vh] overflow-y-auto px-12">
-          <WorkoutSessionForm
-            mode="add"
-            userId={userId}
-            workoutDayId={workoutDayId}
-          />
-        </div>
-      </DialogContent>
-    </Dialog>
   );
 }

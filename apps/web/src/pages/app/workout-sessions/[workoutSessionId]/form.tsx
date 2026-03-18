@@ -1,3 +1,6 @@
+import { Check } from "lucide-react";
+import { Controller } from "react-hook-form";
+
 import {
   Accordion,
   AccordionContent,
@@ -21,7 +24,6 @@ import {
   Textarea,
 } from "@/components/ui";
 import { type Props, useWorkoutSessionForm } from "./useForm";
-import { Controller } from "react-hook-form";
 import {
   Visibility,
   visibilityParcer,
@@ -29,7 +31,6 @@ import {
   weightUnitParser,
 } from "@/packages/schemas";
 import { ExerciseAvatar } from "../../exercises/component";
-import { Check } from "lucide-react";
 
 export function WorkoutSessionForm({
   mode,
