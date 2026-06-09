@@ -2,14 +2,17 @@ import { useParams } from "react-router";
 
 import { BackButtonNavigation } from "@/components/ui";
 import { WorkoutDayForm } from "./form";
-import { useWorkoutPlan } from "@/store";
+import { useExercise, useProfile, useWorkoutPlan } from "@/store";
 
 export function WorkoutDayPage() {
   const { workoutDay } = useWorkoutPlan();
   const { workoutPlanId, workoutDayId } = useParams();
+  const { exercises } = useExercise();
+  const { profile } = useProfile();
 
   if (!workoutPlanId || !workoutDayId)
     return <div>Invalid workout plan or workout day ID.</div>;
+  if (!profile) return <div>Loading profile...</div>;
 
   return (
     <>
@@ -22,6 +25,8 @@ export function WorkoutDayPage() {
           mode="edit"
           workoutPlanId={workoutPlanId}
           workoutDayId={workoutDayId}
+          exercises={exercises}
+          profile={profile}
         />
       </div>
     </>

@@ -21,7 +21,7 @@ import {
   DropdownMenuTrigger,
   Label,
 } from "@/components/ui";
-import type { Profile, WorkoutPlan } from "@/packages/schemas";
+import type { Exercise, Profile, WorkoutPlan } from "@/packages/schemas";
 
 import defaultDefaultWorkoutPlanThumbnail from "@/assets/images/default-workout-plan.jpg";
 import { WorkoutPlanForm } from "./form";
@@ -146,7 +146,17 @@ export function DialogEdit({ className }: { className?: string }) {
   );
 }
 
-export function DialogCreateExerciseDay({ className }: { className?: string }) {
+export function DialogCreateExerciseDay({
+  workoutPlanId,
+  exercises,
+  profile,
+  className,
+}: {
+  workoutPlanId: string;
+  exercises: Exercise[];
+  profile: Profile;
+  className?: string;
+}) {
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -159,7 +169,12 @@ export function DialogCreateExerciseDay({ className }: { className?: string }) {
           </DialogTitle>
         </DialogHeader>
         <div className="xs:px-0 mx-3 max-h-[70vh] overflow-y-auto px-12">
-          <WorkoutDayForm mode="add" />
+          <WorkoutDayForm
+            mode="add"
+            workoutPlanId={workoutPlanId}
+            exercises={exercises}
+            profile={profile}
+          />
           <DialogClose asChild>
             <Button type="button" variant="outline" className="mt-4 w-full">
               Cancelar <X />

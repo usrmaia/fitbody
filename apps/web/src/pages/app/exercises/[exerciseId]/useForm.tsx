@@ -8,13 +8,18 @@ import { useExercise } from "@/store";
 type ExerciseFormInput = z.input<typeof exerciseSchema>;
 type ExerciseFormOutput = z.output<typeof exerciseSchema>;
 
-type Props = {
+export type ExerciseFormProps = {
   exerciseId?: string;
+  exercise?: Exercise;
   mode: "add" | "edit" | "delete";
 };
 
-export const useExerciseForm = ({ exerciseId, mode }: Props) => {
-  const { exercise, deleteExercise, postExercise, putExercise } = useExercise();
+export const useExerciseForm = ({
+  exerciseId,
+  exercise,
+  mode,
+}: ExerciseFormProps) => {
+  const { deleteExercise, postExercise, putExercise } = useExercise();
 
   if (
     (mode === "edit" || mode === "delete") &&
@@ -30,7 +35,7 @@ export const useExerciseForm = ({ exerciseId, mode }: Props) => {
         : undefined,
   });
 
-  const onSubmit = async (data: Exercise) => {
+  const onSubmit = form.handleSubmit(async (data: Exercise) => {
     let res;
 
     if (mode === "add") res = await postExercise(data);
@@ -39,11 +44,10 @@ export const useExerciseForm = ({ exerciseId, mode }: Props) => {
 
     if (!res.success && res.error)
       form.setError("root", { message: res.error.errors.join(", ") });
-  };
+  });
 
   return {
     ...form,
-    exercise,
     onSubmit,
   };
 };

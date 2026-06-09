@@ -28,36 +28,30 @@ import {
   visibilityParcer,
   type ExerciseMuscleGroup,
 } from "@/packages/schemas";
-import { useExerciseForm } from "./useForm";
+import { useExerciseForm, type ExerciseFormProps } from "./useForm";
 
-type Props = {
-  exerciseId?: string;
-  mode: "add" | "edit";
-};
-
-export function ExerciseForm({ exerciseId, mode }: Props) {
+export function ExerciseForm({
+  exerciseId,
+  exercise,
+  mode,
+}: ExerciseFormProps) {
   const {
     control,
     formState: { errors },
     getValues,
-    handleSubmit,
     onSubmit,
     register,
     setValue,
     watch,
-  } = useExerciseForm({ exerciseId, mode });
+  } = useExerciseForm({ exerciseId, exercise, mode });
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
+    <form onSubmit={onSubmit}>
       <FieldSet className="bg-card w-full px-8 py-5">
         <FieldGroup>
           <Field>
             <FieldLabel>Nome</FieldLabel>
-            <Input
-              type="text"
-              placeholder="Nome do exercício"
-              {...register("name")}
-            />
+            <Input placeholder="Nome do exercício" {...register("name")} />
             <FieldError errors={[{ message: errors.name?.message }]} />
           </Field>
 

@@ -1,6 +1,8 @@
-import { useWorkoutPlan } from "@/store";
+import { useExercise, useWorkoutPlan } from "@/store";
 
 export const WorkoutPlansLoader = async () => {
   const { getWorkoutPlans } = useWorkoutPlan.getState();
-  await getWorkoutPlans({ orderBy: [{ name: "asc" }] });
+  const { getExercises } = useExercise.getState();
+
+  await Promise.all([getWorkoutPlans(), getExercises()]);
 };

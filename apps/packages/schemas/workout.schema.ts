@@ -120,40 +120,39 @@ export type WorkoutPlan = z.infer<typeof workoutPlanSchema>;
 
 export const workoutSetSchema = z.object({
   id: z.ulid().optional(),
-  reps: z.coerce.number().int().optional(),
-  weight: z.coerce
+  reps: z.coerce.number().int().nullish(),
+  weightKg: z.coerce
     .number()
     .min(0, "O peso não pode ser negativo")
     .max(1000, "O peso não pode exceder 1000")
-    .optional(),
-  weightUnit: weightUnitSchema.optional(),
+    .nullish(),
+  weightUnit: weightUnitSchema.nullish(),
   timeInSeconds: z.coerce
     .number()
     .min(0, "O tempo não pode ser negativo")
     .max(3600, "O tempo não pode exceder 3600 segundos (1 hora)")
     .int()
-    .optional(),
+    .nullish(),
   rpe: z.coerce
     .number()
     .min(0, "O RPE não pode ser negativo")
     .max(100, "O RPE não pode exceder 100")
-    .optional(),
+    .nullish(),
   rir: z.coerce
     .number()
     .int()
     .min(0, "O RIR não pode ser negativo")
     .max(30, "O RIR não pode exceder 30")
-    .optional(),
+    .nullish(),
   seq: z.coerce
     .number()
     .int()
     .min(0, "A sequência não pode ser negativa")
-    .max(60, "A sequência não pode exceder 60")
-    .optional(),
+    .max(60, "A sequência não pode exceder 60"),
   notes: z
     .string()
     .max(1024, "Anotação não pode exceder 1024 caracteres")
-    .optional(),
+    .nullish(),
 
   workoutSessionId: z.ulid().optional(),
   exerciseId: z.ulid(),
@@ -169,7 +168,7 @@ export const workoutSessionSchema = z.object({
   notes: z
     .string()
     .max(1024, "Anotação não pode exceder 1024 caracteres")
-    .optional(),
+    .nullish(),
   startedAt: z.coerce.date(),
   endedAt: z.preprocess(
     (value) => (value == null || value === "" ? undefined : value),

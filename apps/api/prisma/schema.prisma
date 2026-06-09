@@ -316,7 +316,7 @@ model WorkoutSet {
   weightKg      Decimal?    @db.Decimal(5, 2)
   weightUnit    WeightUnit?
   timeInSeconds Int?        @db.SmallInt
-  rpe           Int         @default(1) @db.SmallInt // Rate of Perceived Exertion
+  rpe           Int?        @default(1) @db.SmallInt // Rate of Perceived Exertion
   rir           Int?        @default(0) @db.SmallInt // Reps in Reserve
   seq           Int         @default(0) // To maintain the order of sets in a workout session
   notes         String?     @db.VarChar(1024)

@@ -20,7 +20,7 @@ export function ExercisePage() {
         className="mt-5"
       />
       {exerciseId && profile?.userId === exercise?.createdById && (
-        <ExerciseActionButtons exerciseId={exerciseId} />
+        <ExerciseActionButtons exerciseId={exerciseId} exercise={exercise} />
       )}
       <ExerciseDetails exercise={exercise} profile={profile || undefined} />
     </>

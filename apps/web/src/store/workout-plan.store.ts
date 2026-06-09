@@ -103,6 +103,7 @@ export const useWorkoutPlan = create<State & Actions>((set) => ({
         createdBy: true,
         workoutDays: { include: { workoutDayExercises: true } },
       },
+      orderBy: [{ name: "asc" }],
     },
   ) => {
     const res = await http.get("/api/workout-plans", { params });

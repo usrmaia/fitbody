@@ -10,7 +10,10 @@ export const WorkoutSessionsLoader = async () => {
 
   await Promise.all([
     getWorkoutSessions({
-      include: { workoutDay: true, workoutSets: true },
+      include: {
+        workoutDay: true,
+        workoutSets: { include: { exercise: true } },
+      },
       where: { userId: profile.userId },
       orderBy: [{ startedAt: "asc" }],
     }),

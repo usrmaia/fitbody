@@ -179,7 +179,7 @@ const Body = ({
             return (
               <path
                 key={path}
-                onPress={
+                onClick={
                   isPartDisabled(bodyPart.slug)
                     ? undefined
                     : () => onBodyPartPress?.(bodyPart)
@@ -205,7 +205,7 @@ const Body = ({
             return (
               <path
                 key={path}
-                onPress={
+                onClick={
                   isPartDisabled(bodyPart.slug)
                     ? undefined
                     : () => onBodyPartPress?.(bodyPart, "left")
@@ -229,7 +229,7 @@ const Body = ({
             return (
               <path
                 key={path}
-                onPress={
+                onClick={
                   isPartDisabled(bodyPart.slug)
                     ? undefined
                     : () => onBodyPartPress?.(bodyPart, "right")

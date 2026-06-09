@@ -92,10 +92,7 @@ export default async function workoutPlanRoute(app: FastifyInstance) {
       if (!sessionUser) throw new Unauthorized();
 
       const args = req.query;
-      console.log("args", args);
       const plans = await getWorkoutPlans(args, sessionUser.user);
-
-      console.log("plans", plans);
 
       const result: Result = {
         success: true,

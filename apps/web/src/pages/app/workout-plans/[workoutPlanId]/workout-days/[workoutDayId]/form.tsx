@@ -51,21 +51,29 @@ import {
   muscleGroupParcer,
   type Exercise,
   type ExerciseMuscleGroup,
+  type ProfileUser,
   type WorkoutDayExercise,
 } from "@/packages/schemas";
 import { useWorkoutDayForm } from "./useForm";
-import { useExercise, useProfile } from "@/store";
 
 import defaultExerciseThumbnail from "@/assets/images/default-exercise.jpg";
 import { BodyHighlighter } from "@/components";
 
 type Props = {
+  mode: "add" | "edit";
   workoutPlanId: string;
   workoutDayId?: string;
-  mode: "add" | "edit";
+  exercises: Exercise[];
+  profile: ProfileUser;
 };
 
-export function WorkoutDayForm({ workoutPlanId, workoutDayId, mode }: Props) {
+export function WorkoutDayForm({
+  mode,
+  workoutPlanId,
+  workoutDayId,
+  exercises,
+  profile,
+}: Props) {
   const {
     control,
     formState: { errors, isSubmitting },
@@ -76,8 +84,6 @@ export function WorkoutDayForm({ workoutPlanId, workoutDayId, mode }: Props) {
     setValue,
     watch,
   } = useWorkoutDayForm({ workoutPlanId, workoutDayId, mode });
-  const { exercises } = useExercise();
-  const { profile } = useProfile();
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>

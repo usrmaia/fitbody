@@ -19,7 +19,7 @@ import {
   Separator,
 } from "@/components/ui";
 import { ExerciseForm } from "./form";
-import { useExerciseForm } from "./useForm";
+import { useExerciseForm, type ExerciseFormProps } from "./useForm";
 import {
   muscleGroupParcer,
   type Exercise,
@@ -28,15 +28,12 @@ import {
 
 import defaultExerciseThumbnail from "@/assets/images/default-exercise.jpg";
 
-export function ExerciseActionButtons({ exerciseId }: { exerciseId: string }) {
+export function ExerciseActionButtons(props: Omit<ExerciseFormProps, "mode">) {
   return (
     <div className="mt-5 px-8">
       <div className="flex w-full justify-end gap-4">
-        <DialogEdit exerciseId={exerciseId} className="text-primary h-5 w-5" />
-        <DialogDelete
-          exerciseId={exerciseId}
-          className="text-primary h-5 w-5"
-        />
+        <DialogEdit {...props} className="text-primary h-5 w-5" />
+        <DialogDelete {...props} className="text-primary h-5 w-5" />
       </div>
     </div>
   );
@@ -44,11 +41,8 @@ export function ExerciseActionButtons({ exerciseId }: { exerciseId: string }) {
 
 export function DialogEdit({
   className,
-  exerciseId,
-}: {
-  className?: string;
-  exerciseId: string;
-}) {
+  ...props
+}: Omit<ExerciseFormProps, "mode"> & { className?: string }) {
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -59,7 +53,7 @@ export function DialogEdit({
           <DialogTitle className="text-center">Editar Exercício</DialogTitle>
         </DialogHeader>
         <div className="xs:px-0 mx-3 max-h-[70vh] overflow-y-auto px-12">
-          <ExerciseForm mode="edit" exerciseId={exerciseId} />
+          <ExerciseForm {...props} mode="edit" />
         </div>
       </DialogContent>
     </Dialog>
@@ -68,16 +62,14 @@ export function DialogEdit({
 
 export function DialogDelete({
   className,
-  exerciseId,
-}: {
+  ...props
+}: Omit<ExerciseFormProps, "mode"> & {
   className?: string;
-  exerciseId: string;
 }) {
   const {
-    formState: { errors, isSubmitting },
-    exercise,
+    formState: { errors, isSubmitting, isSubmitSuccessful },
     onSubmit,
-  } = useExerciseForm({ exerciseId, mode: "delete" });
+  } = useExerciseForm({ ...props, mode: "delete" });
 
   return (
     <Dialog>
@@ -88,8 +80,9 @@ export function DialogDelete({
         <DialogHeader>
           <DialogTitle className="text-center">Excluir Exercício</DialogTitle>
           <DialogDescription className="text-center">
-            Tem certeza que deseja excluir este exercício? Esta ação não pode
-            ser desfeita.
+            {isSubmitSuccessful
+              ? "Exercício excluído com sucesso!"
+              : "Tem certeza que deseja excluir este exercício? Esta ação não pode ser desfeita."}
           </DialogDescription>
           <Label className="text-destructive justify-center text-center text-sm">
             {errors.root?.message}
@@ -98,15 +91,15 @@ export function DialogDelete({
         <DialogFooter>
           <DialogClose asChild>
             <Button variant="outline">
-              Cancelar <X />
+              {isSubmitSuccessful ? "Fechar" : "Cancelar"} <X />
             </Button>
           </DialogClose>
           <Button
             variant="destructive"
-            onClick={() => onSubmit(exercise!)}
-            disabled={isSubmitting}
+            onClick={onSubmit}
+            disabled={isSubmitting || isSubmitSuccessful}
           >
-            Excluir <Trash />
+            {isSubmitSuccessful ? "Excluído" : "Excluir"} <Trash />
           </Button>
         </DialogFooter>
       </DialogContent>

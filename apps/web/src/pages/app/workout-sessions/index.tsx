@@ -2,7 +2,7 @@ import { Plus, Search } from "lucide-react";
 import { useState } from "react";
 import { NavLink } from "react-router";
 
-import { WorkoutSessionDialog } from "./component";
+import { WorkoutSessionDetails, WorkoutSessionDialog } from "./component";
 import {
   BackButtonNavigation,
   Button,
@@ -111,11 +111,13 @@ export function WorkoutSessionsPage() {
           />
         )}
       </div>
-      <div className="mt-5 grid grid-cols-2 gap-4 px-8">
+      <div className="mt-5 flex flex-col gap-4 px-8">
+        <Label className="text-foreground/70">Treinamentos</Label>
         {workoutSessions.map((workoutSession) => (
-          <pre key={workoutSession.id}>
-            {JSON.stringify(workoutSession, null, 2)}
-          </pre>
+          <WorkoutSessionDetails
+            key={workoutSession.id}
+            workoutSession={workoutSession}
+          />
         ))}
       </div>
     </>

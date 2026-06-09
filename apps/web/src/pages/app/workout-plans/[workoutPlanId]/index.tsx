@@ -1,3 +1,5 @@
+import { useNavigate } from "react-router";
+
 import {
   BackButtonNavigation,
   Button,
@@ -20,20 +22,27 @@ import {
   Trash,
 } from "lucide-react";
 import { useWorkoutPlanPage } from "./usePage";
-import { useNavigate } from "react-router";
+import { useExercise } from "@/store";
 
 export function WorkoutPlanPage() {
   const navigate = useNavigate();
   const { profile, workoutPlan, handleMoveDay } = useWorkoutPlanPage();
+  const { exercises } = useExercise();
 
   if (!profile || !workoutPlan) return null;
+  if (!workoutPlan.id) return null;
 
   return (
     <>
       <BackButtonNavigation title={workoutPlan.name} />
       <div className="flex w-full justify-end gap-4 px-8">
         <DialogEdit className="text-primary h-5 w-5" />
-        <DialogCreateExerciseDay className="text-primary h-5 w-5" />
+        <DialogCreateExerciseDay
+          className="text-primary h-5 w-5"
+          workoutPlanId={workoutPlan.id}
+          exercises={exercises}
+          profile={profile}
+        />
       </div>
       <Carousel opts={{ align: "start" }} className="bg-card my-5 w-full px-6">
         <CarouselContent className="mx-0 w-full px-0">
